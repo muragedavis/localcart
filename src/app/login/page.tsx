@@ -39,12 +39,15 @@ export default function LoginPage() {
         localStorage.setItem('token', token);
         setUser({ userId, email: userEmail, full_name, role });
         router.push('/');
+        // keep loading=true while navigating — component unmounts anyway
+        return;
       }
+      setError('Login failed. Please try again.');
+      setLoading(false);
     } catch (err: any) {
       if (err.response?.status === 401) setError('Invalid email or password.');
       else if (err.response?.status === 500) setError('Server error. Please try again later.');
       else setError(err.response?.data?.error || 'Login failed. Check your connection.');
-    } finally {
       setLoading(false);
     }
   };

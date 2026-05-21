@@ -57,10 +57,12 @@ export default function RegisterPage() {
         localStorage.setItem('token', token);
         setUser({ userId, email: userEmail, full_name, role });
         router.push('/');
+        return;
       }
+      setError('Registration failed. Please try again.');
+      setLoading(false);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Registration failed');
-    } finally {
       setLoading(false);
     }
   };

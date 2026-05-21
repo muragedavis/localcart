@@ -20,12 +20,13 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle errors
+// Handle 401s on protected routes — skip redirect when already on auth pages
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
+    if (error.response?.status === 401 && typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path !== '/login' && path !== '/register') {
         localStorage.removeItem('token');
         window.location.href = '/login';
       }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCartStore, useAuthStore } from '@/lib/store';
 import apiClient from '@/lib/api-client';
 import Link from 'next/link';
@@ -13,8 +13,17 @@ export default function CartPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'bank'>('cash');
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const hydrate = useAuthStore((state) => state.hydrate);
   const user = useAuthStore((state) => state.user);
+
+  useEffect(() => {
+    hydrate();
+    setIsHydrated(true);
+  }, [hydrate]);
+
+  if (!isHydrated) return null;
 
   if (!isLoggedIn) {
     return (

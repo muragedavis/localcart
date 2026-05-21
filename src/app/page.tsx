@@ -39,13 +39,6 @@ const stats = [
   { value: '99%', label: 'Satisfaction Rate' },
 ];
 
-const steps = [
-  { step: '01', title: 'Sign Up', desc: 'Create your account in seconds — free forever.' },
-  { step: '02', title: 'Browse', desc: 'Explore our wide selection of quality products.' },
-  { step: '03', title: 'Add to Cart', desc: 'Pick what you love and head to checkout.' },
-  { step: '04', title: 'Delivered', desc: 'Get your order right to your doorstep.' },
-];
-
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
@@ -127,29 +120,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── How it works ── */}
-      <section className="section bg-white">
-        <div className="container">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">How It Works</h2>
-            <p className="text-gray-500 max-w-md mx-auto">From sign-up to doorstep in four simple steps.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
-            {/* Connecting line on desktop */}
-            <div className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px bg-gray-200" />
-            {steps.map((s) => (
-              <div key={s.step} className="relative text-center">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 relative z-10 shadow-sm border border-gray-100 bg-white">
-                  <span className="text-xl font-bold" style={{ color: 'var(--color-primary)' }}>{s.step}</span>
-                </div>
-                <h3 className="font-bold text-gray-900 mb-2">{s.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Featured Products preview ── */}
       <section className="section bg-gray-50">
         <div className="container">
@@ -208,8 +178,9 @@ export default function Home() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 text-sm"
                   >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.781 1.226l-.041.021-4.268-.559.569 4.152.036.057a9.64 9.64 0 001.479 4.727c3.113 5.395 9.911 7.035 15.31 3.922 1.674-.963 3.124-2.38 4.152-3.963l-.067-.108a9.645 9.645 0 00-3.849-3.12c-1.023-.537-2.127-.889-3.149-.902zm8.143-7.339C13.966 2.182 7.693 2.701 3.52 7.026 1.246 9.36.102 12.336.013 15.32a15.34 15.34 0 002.087 7.697l-2.185 7.977L8.08 22.938a15.17 15.17 0 007.239 1.843c7.932 0 14.385-6.453 14.385-14.385 0-3.84-1.545-7.456-4.332-10.133" />
+                    <svg className="w-5 h-5" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 2C10.059 2 2 10.059 2 20c0 3.294.904 6.384 2.479 9.027L2 38l9.139-2.395A17.93 17.93 0 0020 38c9.941 0 18-8.059 18-18S29.941 2 20 2z" fill="white" fillOpacity=".9"/>
+                      <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" fill="currentColor"/>
                     </svg>
                     Chat on WhatsApp
                   </a>
@@ -231,43 +202,16 @@ export default function Home() {
               </div>
               {/* Visual side */}
               <div className="hidden md:flex flex-col items-center justify-center p-12 bg-gradient-to-br from-emerald-50 to-emerald-100">
-                <div className="w-24 h-24 bg-emerald-500 rounded-3xl flex items-center justify-center shadow-xl mb-5">
-                  <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.781 1.226l-.041.021-4.268-.559.569 4.152.036.057a9.64 9.64 0 001.479 4.727c3.113 5.395 9.911 7.035 15.31 3.922 1.674-.963 3.124-2.38 4.152-3.963l-.067-.108a9.645 9.645 0 00-3.849-3.12c-1.023-.537-2.127-.889-3.149-.902zm8.143-7.339C13.966 2.182 7.693 2.701 3.52 7.026 1.246 9.36.102 12.336.013 15.32a15.34 15.34 0 002.087 7.697l-2.185 7.977L8.08 22.938a15.17 15.17 0 007.239 1.843c7.932 0 14.385-6.453 14.385-14.385 0-3.84-1.545-7.456-4.332-10.133" />
+                <div className="w-24 h-24 bg-[#25D366] rounded-3xl flex items-center justify-center shadow-xl mb-5">
+                  <svg className="w-14 h-14" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 2C10.059 2 2 10.059 2 20c0 3.294.904 6.384 2.479 9.027L2 38l9.139-2.395A17.93 17.93 0 0020 38c9.941 0 18-8.059 18-18S29.941 2 20 2z" fill="white" fillOpacity=".2"/>
+                    <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" fill="white"/>
                   </svg>
                 </div>
                 <p className="text-emerald-800 font-semibold text-center">We respond within minutes</p>
                 <p className="text-emerald-600 text-sm text-center mt-1">Available around the clock</p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section className="section bg-gray-50">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
-            <p className="text-gray-500 max-w-md mx-auto">Everything you need to know before you start shopping.</p>
-          </div>
-          <div className="max-w-2xl mx-auto space-y-3">
-            {[
-              { q: 'How do I place an order?', a: 'Browse products, add to cart, and proceed to checkout. We accept cash on delivery, card, and bank transfer.' },
-              { q: 'How long does delivery take?', a: 'Most orders are delivered within 3–5 business days. Express delivery is available in select areas.' },
-              { q: 'What payment methods do you accept?', a: 'We accept Cash on Delivery, Credit/Debit Cards, and Bank Transfers.' },
-              { q: "What's your refund policy?", a: 'We offer 30-day returns on all products. Contact our support team for a hassle-free refund.' },
-            ].map(({ q, a }) => (
-              <details key={q} className="card group cursor-pointer p-0 overflow-hidden">
-                <summary className="flex items-center justify-between p-5 font-semibold text-gray-900 list-none select-none">
-                  {q}
-                  <svg className="w-5 h-5 text-gray-400 transition-transform duration-200 group-open:rotate-180 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <p className="text-gray-500 text-sm leading-relaxed px-5 pb-5">{a}</p>
-              </details>
-            ))}
           </div>
         </div>
       </section>
