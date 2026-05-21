@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 interface DashboardData {
   sales: {
     total_orders: number;
-    total_revenue: number;
+    total_revenue: number | string;
     total_customers: number;
     orders_last_30_days: number;
   };
@@ -17,7 +17,7 @@ interface DashboardData {
     id: number;
     name: string;
     total_sold: number;
-    revenue: number;
+    revenue: number | string;
   }>;
   lowStockProducts: Array<{
     id: number;
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
         </div>
         <div className="card text-center">
           <p className="text-gray-600 mb-2">Total Revenue</p>
-          <p className="text-4xl font-bold">${sales.total_revenue?.toFixed(0) || 0}</p>
+          <p className="text-4xl font-bold">${Number(sales.total_revenue ?? 0).toFixed(0)}</p>
         </div>
         <div className="card text-center">
           <p className="text-gray-600 mb-2">Total Customers</p>
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
                   <h3 className="font-medium">{product.name}</h3>
                   <p className="text-gray-600 text-sm">{product.total_sold} sold</p>
                 </div>
-                <p className="font-bold text-blue-600">${product.revenue?.toFixed(2) || 0}</p>
+                <p className="font-bold text-blue-600">${Number(product.revenue ?? 0).toFixed(2)}</p>
               </div>
             ))}
           </div>

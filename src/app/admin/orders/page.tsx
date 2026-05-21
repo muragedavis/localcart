@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 interface Order {
   id: number;
-  total_amount: number;
+  total_amount: number | string;
   order_status: string;
   payment_status: string;
   created_at: string;
@@ -86,7 +86,7 @@ export default function AdminOrders() {
                     <p className="text-gray-600 text-sm">{order.email}</p>
                   </div>
                 </td>
-                <td className="px-6 py-4 font-bold">${order.total_amount.toFixed(2)}</td>
+                <td className="px-6 py-4 font-bold">${Number(order.total_amount).toFixed(2)}</td>
                 <td className="px-6 py-4">
                   <select
                     value={order.order_status}
