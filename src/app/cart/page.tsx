@@ -10,6 +10,8 @@ export default function CartPage() {
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
   const removeItem = useCartStore((state) => state.removeItem);
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | 'bank'>('cash');
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const user = useAuthStore((state) => state.user);
 
@@ -30,6 +32,15 @@ export default function CartPage() {
       return;
     }
 
+    if (paymentMethod === 'cash') {
+      setShowPaymentDetails(true);
+      return;
+    }
+
+    proceedWithOrder();
+  };
+
+  const proceedWithOrder = async () => {
     setIsLoading(true);
     try {
       const response = await apiClient.post('/orders', {
@@ -38,6 +49,7 @@ export default function CartPage() {
           quantity: item.quantity,
         })),
         shipping_address: `${user?.full_name}, Default Address`,
+        payment_method: paymentMethod,
       });
 
       if (response.data.success) {
@@ -96,18 +108,96 @@ export default function CartPage() {
                 <span>Shipping</span>
                 <span>Free</span>
               </div>
-              <div className="flex justify-between text-lg font-bold">
+              <div className="flex justify-between text-lg font-bold text-blue-600">
                 <span>Total</span>
                 <span>${getTotalPrice().toFixed(2)}</span>
               </div>
             </div>
-            <button
-              onClick={handleCheckout}
-              disabled={isLoading}
-              className="btn-primary w-full"
-            >
-              {isLoading ? 'Processing...' : 'Proceed to Checkout'}
-            </button>
+
+            <div className="mb-6 pb-6 border-b">
+              <h3 className="font-bold text-sm mb-3">Payment Method</h3>
+              <div className="space-y-2">
+                <label className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="cash"
+                    checked={paymentMethod === 'cash'}
+                    onChange={(e) => {
+                      setPaymentMethod(e.target.value as 'cash');
+                      setShowPaymentDetails(false);
+                    }}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">💵 Cash on Delivery</span>
+                </label>
+                <label className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="card"
+                    checked={paymentMethod === 'card'}
+                    onChange={(e) => {
+                      setPaymentMethod(e.target.value as 'card');
+                      setShowPaymentDetails(false);
+                    }}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">💳 Credit/Debit Card</span>
+                </label>
+                <label className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="bank"
+                    checked={paymentMethod === 'bank'}
+                    onChange={(e) => {
+                      setPaymentMethod(e.target.value as 'bank');
+                      setShowPaymentDetails(false);
+                    }}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">🏦 Bank Transfer</span>
+                </label>
+              </div>
+            </div>
+
+            {showPaymentDetails && paymentMethod === 'cash' && (
+              <div className="bg-green-50 border border-green-200 rounded p-4 mb-4">
+                <h3 className="font-bold text-sm text-green-800 mb-2">✓ Cash Payment Details</h3>
+                <ul className="text-xs text-green-700 space-y-1">
+                  <li>📍 Amount: ${getTotalPrice().toFixed(2)}</li>
+                  <li>🚚 Payment will be collected on delivery</li>
+                  <li>📱 Our rider will contact you before arrival</li>
+                  <li>🎯 Please keep exact change ready</li>
+                </ul>
+                <div className="mt-3 flex gap-2">
+                  <button
+                    onClick={proceedWithOrder}
+                    disabled={isLoading}
+                    className="btn-primary text-sm flex-1"
+                  >
+                    {isLoading ? 'Processing...' : 'Confirm Order'}
+                  </button>
+                  <button
+                    onClick={() => setShowPaymentDetails(false)}
+                    className="btn-secondary text-sm flex-1"
+                  >
+                    Back
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!showPaymentDetails && (
+              <button
+                onClick={handleCheckout}
+                disabled={isLoading}
+                className="btn-primary w-full"
+              >
+                {isLoading ? 'Processing...' : 'Proceed to Checkout'}
+              </button>
+            )}
           </div>
         </div>
       )}
