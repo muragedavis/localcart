@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import WhatsAppWidget from '@/components/WhatsAppWidget';
 import '@/styles/globals.css';
 import { getSiteSettings, darkenHex } from '@/lib/settings';
 import { SettingsProvider } from '@/lib/settings-context';
@@ -36,6 +37,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Header settings={settings} />
           <main className="flex-grow">{children}</main>
           <Footer settings={settings} />
+          <WhatsAppWidget />
         </SettingsProvider>
       </body>
     </html>
