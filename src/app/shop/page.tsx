@@ -12,7 +12,7 @@ interface Product {
   description: string;
   image_url: string;
   category_name: string;
-  stock_quantity: number;
+  stock_quantity?: number;
 }
 
 function SkeletonCard() {
