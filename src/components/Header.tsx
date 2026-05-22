@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuthStore } from '@/lib/store';
+import { useAuthStore, useCartStore } from '@/lib/store';
 import { useEffect, useState } from 'react';
 import type { SiteSettings } from '@/lib/settings';
 
@@ -18,6 +18,8 @@ function parseLinks(raw: string): NavLink[] {
 
 export default function Header({ settings }: HeaderProps) {
   const { user, logout, hydrate } = useAuthStore();
+  const cartItems = useCartStore((state) => state.items);
+  const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
   const [isHydrated, setIsHydrated] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -58,10 +60,17 @@ export default function Header({ settings }: HeaderProps) {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-3">
-          <Link href="/cart" className="flex items-center space-x-1 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
+          <Link href="/cart" className="relative flex items-center space-x-1 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50">
+            <span className="relative">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] text-[10px] font-bold text-white rounded-full flex items-center justify-center px-1" style={{ backgroundColor: 'var(--color-primary)' }}>
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
+            </span>
             <span>Cart</span>
           </Link>
           {user ? (
@@ -102,7 +111,14 @@ export default function Header({ settings }: HeaderProps) {
               {link.label}
             </Link>
           ))}
-          <Link href="/cart" className="block px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50" onClick={() => setMenuOpen(false)}>Cart</Link>
+          <Link href="/cart" className="flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50" onClick={() => setMenuOpen(false)}>
+            Cart
+            {cartCount > 0 && (
+              <span className="min-w-[20px] h-5 text-xs font-bold text-white rounded-full flex items-center justify-center px-1" style={{ backgroundColor: 'var(--color-primary)' }}>
+                {cartCount > 99 ? '99+' : cartCount}
+              </span>
+            )}
+          </Link>
           {user ? (
             <>
               {user.role === 'admin' && (
