@@ -38,18 +38,11 @@ async function handlePOST(req: NextRequest, user: any) {
       );
     }
 
-    // Get user's cart
+    // Get or create user's cart
     const cartResult = await pool.query(
-      'SELECT id FROM cart WHERE user_id = $1',
+      'INSERT INTO cart (user_id) VALUES ($1) ON CONFLICT (user_id) DO UPDATE SET user_id = EXCLUDED.user_id RETURNING id',
       [user.userId]
     );
-
-    if (cartResult.rows.length === 0) {
-      return NextResponse.json(
-        { success: false, error: 'Cart not found' },
-        { status: 404 }
-      );
-    }
 
     const cartId = cartResult.rows[0].id;
 
