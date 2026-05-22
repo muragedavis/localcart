@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { useCartStore, useAuthStore } from '@/lib/store';
 import apiClient from '@/lib/api-client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useFormatPrice } from '@/lib/settings-context';
+import { ToastContainer, useToast } from '@/components/Toast';
 
 export default function CartPage() {
   const items = useCartStore((state) => state.items);
@@ -17,6 +20,9 @@ export default function CartPage() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const hydrate = useAuthStore((state) => state.hydrate);
   const user = useAuthStore((state) => state.user);
+  const router = useRouter();
+  const formatPrice = useFormatPrice();
+  const { toasts, addToast, removeToast } = useToast();
 
   useEffect(() => {
     hydrate();
@@ -48,18 +54,18 @@ export default function CartPage() {
         payment_method: paymentMethod,
       });
       if (response.data.success) {
-        alert('Order placed successfully!');
-        window.location.href = '/profile';
+        addToast('Order placed successfully!', 'success');
+        setTimeout(() => router.push('/profile'), 1500);
       }
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Failed to place order');
+      addToast(error.response?.data?.error || 'Failed to place order');
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleCheckout = async () => {
-    if (items.length === 0) { alert('Your cart is empty'); return; }
+    if (items.length === 0) { addToast('Your cart is empty', 'info'); return; }
     if (paymentMethod === 'cash') { setShowConfirm(true); return; }
     proceedWithOrder();
   };
@@ -78,6 +84,7 @@ export default function CartPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
       <div className="container py-10">
         <div className="mb-6">
           <Link href="/shop" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
@@ -118,7 +125,7 @@ export default function CartPage() {
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 truncate">{item.product_name}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">${item.price.toFixed(2)} each</p>
+                    <p className="text-sm text-gray-500 mt-0.5">{formatPrice(item.price)} each</p>
                   </div>
 
                   {/* Quantity control */}
@@ -143,7 +150,7 @@ export default function CartPage() {
                   </div>
 
                   <p className="font-bold text-gray-900 w-20 text-right">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    {formatPrice(item.price * item.quantity)}
                   </p>
 
                   <button
@@ -166,7 +173,7 @@ export default function CartPage() {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal ({items.reduce((a, i) => a + i.quantity, 0)} items)</span>
-                    <span>${getTotalPrice().toFixed(2)}</span>
+                    <span>{formatPrice(getTotalPrice())}</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
@@ -174,7 +181,7 @@ export default function CartPage() {
                   </div>
                   <div className="border-t border-gray-100 pt-3 flex justify-between font-bold text-base text-gray-900">
                     <span>Total</span>
-                    <span>${getTotalPrice().toFixed(2)}</span>
+                    <span>{formatPrice(getTotalPrice())}</span>
                   </div>
                 </div>
               </div>
@@ -223,7 +230,7 @@ export default function CartPage() {
                 <div className="card border-2 border-emerald-200 bg-emerald-50">
                   <h3 className="font-semibold text-emerald-800 mb-2 text-sm">Confirm cash order</h3>
                   <ul className="text-xs text-emerald-700 space-y-1 mb-4">
-                    <li>Amount due: <strong>${getTotalPrice().toFixed(2)}</strong></li>
+                    <li>Amount due: <strong>{formatPrice(getTotalPrice())}</strong></li>
                     <li>Payment collected on delivery</li>
                     <li>Rider will call before arrival</li>
                   </ul>
@@ -252,7 +259,7 @@ export default function CartPage() {
                       </svg>
                       Processing...
                     </span>
-                  ) : `Checkout — $${getTotalPrice().toFixed(2)}`}
+                  ) : `Checkout — ${formatPrice(getTotalPrice())}`}
                 </button>
               )}
             </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import apiClient from '@/lib/api-client';
 import ProductCard from '@/components/ProductCard';
 import { useCartStore, useAuthStore } from '@/lib/store';
+import { ToastContainer, useToast } from '@/components/Toast';
 
 interface Product {
   id: number;
@@ -40,6 +41,7 @@ export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const addItem = useCartStore((state) => state.addItem);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const { toasts, addToast, removeToast } = useToast();
 
   useEffect(() => {
     apiClient.get('/products')
@@ -61,13 +63,25 @@ export default function ShopPage() {
     });
   }, [products, activeCategory, search]);
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = async (product: Product) => {
     if (!isLoggedIn) { window.location.href = '/login'; return; }
-    addItem({ id: product.id, product_id: product.id, product_name: product.name, quantity: 1, price: product.price });
+    try {
+      const response = await apiClient.post('/cart', {
+        product_id: product.id,
+        quantity: 1,
+      });
+      if (response.data.success) {
+        addItem({ id: product.id, product_id: product.id, product_name: product.name, quantity: 1, price: product.price });
+        addToast(`${product.name} added to cart`, 'success');
+      }
+    } catch (error: any) {
+      addToast(error.response?.data?.error || 'Failed to add item to cart');
+    }
   };
 
   return (
     <div>
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
       {/* Header banner */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12">
         <div className="container">

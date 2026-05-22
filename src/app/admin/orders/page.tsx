@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/store';
 import apiClient from '@/lib/api-client';
 import { useRouter } from 'next/navigation';
+import { useFormatPrice } from '@/lib/settings-context';
 
 interface Order {
   id: number;
@@ -20,6 +21,7 @@ export default function AdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const formatPrice = useFormatPrice();
 
   useEffect(() => {
     if (!user || user.role !== 'admin') {
@@ -86,7 +88,7 @@ export default function AdminOrders() {
                     <p className="text-gray-600 text-sm">{order.email}</p>
                   </div>
                 </td>
-                <td className="px-6 py-4 font-bold">${Number(order.total_amount).toFixed(2)}</td>
+                <td className="px-6 py-4 font-bold">{formatPrice(order.total_amount)}</td>
                 <td className="px-6 py-4">
                   <select
                     value={order.order_status}

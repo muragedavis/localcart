@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 const pool = require('@/database/connection');
 import { withAdminAuth } from '@/lib/middleware';
+import { getSiteSettings } from '@/lib/settings';
 
 async function handleGET(req: NextRequest, user: any) {
   try {
+    const settings = await getSiteSettings();
+    
     // Get sales overview
     const salesResult = await pool.query(`
       SELECT 
@@ -45,6 +48,11 @@ async function handleGET(req: NextRequest, user: any) {
         sales,
         topProducts,
         lowStockProducts,
+        currency: {
+          code: settings.currency_code,
+          symbol: settings.currency_symbol,
+          position: settings.currency_position,
+        },
       },
     });
   } catch (error) {

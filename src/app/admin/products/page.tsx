@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useFormatPrice } from '@/lib/settings-context';
+import { ToastContainer, useToast } from '@/components/Toast';
 
 interface Product {
   id: number;
@@ -111,6 +112,7 @@ export default function AdminProducts() {
   const [search, setSearch] = useState('');
   const router = useRouter();
   const formatPrice = useFormatPrice();
+  const { toasts, addToast, removeToast } = useToast();
 
   useEffect(() => {
     if (!user || user.role !== 'admin') { router.push('/'); return; }
@@ -182,7 +184,7 @@ export default function AdminProducts() {
       setFormData(EMPTY_FORM);
     } catch (e) {
       console.error(e);
-      alert('Failed to save product. Please try again.');
+      addToast('Failed to save product. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -194,7 +196,7 @@ export default function AdminProducts() {
       setProducts((prev) => prev.filter((p) => p.id !== id));
       setDeleteConfirm(null);
     } catch {
-      alert('Failed to delete product.');
+      addToast('Failed to delete product.');
     }
   };
 
@@ -207,6 +209,7 @@ export default function AdminProducts() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container py-5 flex items-center justify-between">

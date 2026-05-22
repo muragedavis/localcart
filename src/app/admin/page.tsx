@@ -5,6 +5,7 @@ import { useAuthStore } from '@/lib/store';
 import apiClient from '@/lib/api-client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useFormatPrice } from '@/lib/settings-context';
 
 interface DashboardData {
   sales: {
@@ -31,6 +32,7 @@ export default function AdminDashboard() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const formatPrice = useFormatPrice();
 
   useEffect(() => {
     if (!user || user.role !== 'admin') {
@@ -81,7 +83,7 @@ export default function AdminDashboard() {
         </div>
         <div className="card text-center">
           <p className="text-gray-600 mb-2">Total Revenue</p>
-          <p className="text-4xl font-bold">${Number(sales.total_revenue ?? 0).toFixed(0)}</p>
+          <p className="text-4xl font-bold">{formatPrice(sales.total_revenue ?? 0)}</p>
         </div>
         <div className="card text-center">
           <p className="text-gray-600 mb-2">Total Customers</p>
@@ -105,7 +107,7 @@ export default function AdminDashboard() {
                   <h3 className="font-medium">{product.name}</h3>
                   <p className="text-gray-600 text-sm">{product.total_sold} sold</p>
                 </div>
-                <p className="font-bold text-blue-600">${Number(product.revenue ?? 0).toFixed(2)}</p>
+                <p className="font-bold text-blue-600">{formatPrice(product.revenue ?? 0)}</p>
               </div>
             ))}
           </div>

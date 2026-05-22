@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SETTING_DEFAULTS } from '@/lib/settings-shared';
 import type { SiteSettings } from '@/lib/settings-shared';
+import { ToastContainer, useToast } from '@/components/Toast';
 
 type Tab = 'brand' | 'colors' | 'currency' | 'store' | 'nav' | 'hero' | 'landing' | 'footer';
 
@@ -154,6 +155,7 @@ export default function AdminSettings() {
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('brand');
   const router = useRouter();
+  const { toasts, addToast, removeToast } = useToast();
 
   useEffect(() => {
     if (!user || user.role !== 'admin') { router.push('/'); return; }
@@ -167,7 +169,7 @@ export default function AdminSettings() {
     try {
       await apiClient.put('/admin/settings', settings);
       setSaved(true); setTimeout(() => setSaved(false), 3000);
-    } catch { alert('Failed to save. Please try again.'); }
+    } catch { addToast('Failed to save. Please try again.'); }
     finally { setSaving(false); }
   };
 
@@ -194,6 +196,7 @@ export default function AdminSettings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
       {/* Page Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container py-5 flex items-center justify-between">
