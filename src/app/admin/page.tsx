@@ -30,7 +30,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
             style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
@@ -42,8 +42,8 @@ export default function AdminDashboard() {
 
   if (!dashboard) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-sm text-gray-500">Failed to load dashboard data.</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <p className="text-sm text-gray-500 dark:text-gray-400">Failed to load dashboard data.</p>
       </div>
     );
   }
@@ -80,20 +80,20 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
 
       {/* Top bar */}
-      <div className="bg-white border-b border-gray-100">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
         <div className="container py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <p className="text-xs text-gray-400 font-medium mb-1">Admin Panel</p>
-            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Welcome back, {user?.full_name}</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">Dashboard</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Welcome back, {user?.full_name}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             {quickLinks.map((q) => (
               <Link key={q.href} href={q.href}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm transition-all duration-150">
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:shadow-sm transition-all duration-150">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d={q.icon} />
                 </svg>
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
         {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {statCards.map((c) => (
-            <div key={c.label} className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div key={c.label} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
               <div className="flex items-start justify-between mb-5">
                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.gradient} flex items-center justify-center shadow-sm`}>
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
                   {c.change}
                 </span>
               </div>
-              <p className="text-2xl font-bold text-gray-900 mb-1 tracking-tight">{c.value}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1 tracking-tight">{c.value}</p>
               <p className="text-xs text-gray-400 font-medium">{c.label}</p>
             </div>
           ))}
@@ -130,10 +130,10 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
 
           {/* Top Products */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-sm font-semibold text-gray-900">Top Selling Products</h2>
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Top Selling Products</h2>
                 <p className="text-xs text-gray-400 mt-0.5">Based on total units sold</p>
               </div>
               <Link href="/admin/products" className="text-xs font-semibold hover:underline" style={{ color: 'var(--color-primary)' }}>
@@ -150,15 +150,15 @@ export default function AdminDashboard() {
             ) : (
               <div className="space-y-0">
                 {topProducts.map((p, i) => (
-                  <div key={p.id} className="flex items-center gap-3 py-3 border-b border-gray-50 last:border-0">
-                    <div className="w-6 h-6 rounded-full bg-gray-100 text-gray-400 text-[10px] font-bold flex items-center justify-center shrink-0">
+                  <div key={p.id} className="flex items-center gap-3 py-3 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                    <div className="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-400 text-[10px] font-bold flex items-center justify-center shrink-0">
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate">{p.name}</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{p.name}</p>
                       <p className="text-xs text-gray-400">{p.total_sold} units sold</p>
                     </div>
-                    <p className="text-sm font-semibold text-gray-900 shrink-0">{formatPrice(p.revenue ?? 0)}</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 shrink-0">{formatPrice(p.revenue ?? 0)}</p>
                   </div>
                 ))}
               </div>
@@ -166,10 +166,10 @@ export default function AdminDashboard() {
           </div>
 
           {/* Low Stock */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-sm font-semibold text-gray-900">Stock Alerts</h2>
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Stock Alerts</h2>
                 <p className="text-xs text-gray-400 mt-0.5">Items running low on inventory</p>
               </div>
               <Link href="/admin/products" className="text-xs font-semibold hover:underline" style={{ color: 'var(--color-primary)' }}>
@@ -188,10 +188,10 @@ export default function AdminDashboard() {
             ) : (
               <div className="space-y-0">
                 {lowStockProducts.map((p) => (
-                  <div key={p.id} className="flex items-center gap-3 py-3 border-b border-gray-50 last:border-0">
+                  <div key={p.id} className="flex items-center gap-3 py-3 border-b border-gray-50 dark:border-gray-700 last:border-0">
                     <div className={`w-1.5 h-8 rounded-full shrink-0 ${p.stock_quantity < 5 ? 'bg-red-400' : 'bg-amber-400'}`} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate">{p.name}</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{p.name}</p>
                       <p className="text-xs text-gray-400">{p.stock_quantity} units left</p>
                     </div>
                     <span className={`badge ${p.stock_quantity < 5 ? 'badge-red' : 'badge-yellow'}`}>
@@ -208,13 +208,13 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {quickLinks.map((q) => (
             <Link key={q.href} href={q.href}
-              className="group bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-gray-200 transition-all duration-200">
+              className="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-gray-200 dark:hover:border-gray-600 transition-all duration-200">
               <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${q.gradient} flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md transition-shadow`}>
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={q.icon} />
                 </svg>
               </div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">{q.label}</h3>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">{q.label}</h3>
               <p className="text-xs text-gray-400 leading-relaxed">{q.desc}</p>
               <div className="flex items-center gap-1 mt-3 text-xs font-semibold transition-all duration-150 group-hover:gap-2"
                 style={{ color: 'var(--color-primary)' }}>

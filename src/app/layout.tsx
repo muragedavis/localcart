@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <style dangerouslySetInnerHTML={{ __html: cssVars }} />
         {settings.favicon_url && <link rel="icon" href={settings.favicon_url} />}
       </head>
-      <body className="flex flex-col min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300">
+      <body className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
         <ThemeProvider>
           <SettingsProvider settings={settings}>
             <Header settings={settings} />

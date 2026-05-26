@@ -131,17 +131,17 @@ export default function CartPage() {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       <div className="container py-10">
         <div className="mb-6">
-          <Link href="/shop" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+          <Link href="/shop" className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Continue shopping
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mt-3">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-3">
             Your cart
             {items.length > 0 && <span className="ml-2 text-lg font-normal text-gray-400">({items.length} {items.length === 1 ? 'item' : 'items'})</span>}
           </h1>
@@ -164,31 +164,31 @@ export default function CartPage() {
             <div className="lg:col-span-2 space-y-3">
               {items.map((item) => (
                 <div key={item.id} className="card flex items-center gap-4 p-4">
-                  <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center flex-shrink-0">
                     <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">{item.product_name}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">{formatPrice(item.price)} each</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 truncate">{item.product_name}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{formatPrice(item.price)} each</p>
                   </div>
-                  <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+                  <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
                     <button
                       onClick={() => {
                         if (item.quantity <= 1) removeItem(item.id);
                         else updateQuantity(item.id, item.quantity - 1);
                       }}
-                      className="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors text-lg leading-none"
+                      className="w-7 h-7 rounded-lg bg-white dark:bg-gray-600 shadow-sm flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors text-lg leading-none"
                     >−</button>
-                    <span className="w-8 text-center text-sm font-semibold text-gray-900">{item.quantity}</span>
+                    <span className="w-8 text-center text-sm font-semibold text-gray-900 dark:text-gray-100">{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors text-lg leading-none"
+                      className="w-7 h-7 rounded-lg bg-white dark:bg-gray-600 shadow-sm flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors text-lg leading-none"
                     >+</button>
                   </div>
-                  <p className="font-bold text-gray-900 w-20 text-right">{formatPrice(item.price * item.quantity)}</p>
-                  <button onClick={() => removeItem(item.id)} className="text-gray-300 hover:text-red-500 transition-colors p-1" title="Remove item">
+                  <p className="font-bold text-gray-900 dark:text-gray-100 w-20 text-right">{formatPrice(item.price * item.quantity)}</p>
+                  <button onClick={() => removeItem(item.id)} className="text-gray-300 dark:text-gray-600 hover:text-red-500 transition-colors p-1" title="Remove item">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -200,17 +200,17 @@ export default function CartPage() {
             {/* Order summary */}
             <div className="space-y-4">
               <div className="card">
-                <h2 className="font-bold text-lg text-gray-900 mb-4">Order summary</h2>
+                <h2 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-4">Order summary</h2>
                 <div className="space-y-3 text-sm">
-                  <div className="flex justify-between text-gray-600">
+                  <div className="flex justify-between text-gray-600 dark:text-gray-400">
                     <span>Subtotal ({items.reduce((a, i) => a + i.quantity, 0)} items)</span>
                     <span>{formatPrice(getTotalPrice())}</span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
+                  <div className="flex justify-between text-gray-600 dark:text-gray-400">
                     <span>Shipping</span>
                     <span className="text-emerald-600 font-medium">Free</span>
                   </div>
-                  <div className="border-t border-gray-100 pt-3 flex justify-between font-bold text-base text-gray-900">
+                  <div className="border-t border-gray-100 dark:border-gray-700 pt-3 flex justify-between font-bold text-base text-gray-900 dark:text-gray-100">
                     <span>Total</span>
                     <span>{formatPrice(getTotalPrice())}</span>
                   </div>
@@ -219,15 +219,15 @@ export default function CartPage() {
 
               {/* Payment method */}
               <div className="card">
-                <h3 className="font-semibold text-gray-900 mb-3 text-sm">Payment method</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 text-sm">Payment method</h3>
                 <div className="space-y-2">
                   {paymentOptions.map((option) => (
                     <label
                       key={option.value}
                       className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
-                        paymentMethod === option.value ? '' : 'border-gray-100 hover:border-gray-200'
+                        paymentMethod === option.value ? '' : 'border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600'
                       }`}
-                      style={paymentMethod === option.value ? { borderColor: 'var(--color-primary)', background: 'color-mix(in srgb, var(--color-primary) 8%, white)' } : {}}
+                      style={paymentMethod === option.value ? { borderColor: 'var(--color-primary)', background: 'var(--color-primary-tint)' } : {}}
                     >
                       <input
                         type="radio"
@@ -241,7 +241,7 @@ export default function CartPage() {
                         {option.icon}
                       </span>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">{option.label}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{option.label}</p>
                         <p className="text-xs text-gray-400">{option.desc}</p>
                       </div>
                       {paymentMethod === option.value && (

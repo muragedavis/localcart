@@ -87,21 +87,21 @@ export default function LoginPage() {
       </div>
 
       {/* Right panel — form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 bg-white">
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 bg-white dark:bg-gray-900">
         <div className="w-full max-w-sm">
           <div className="mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
+            <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mb-6 transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
               Back to store
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Sign in</h1>
-            <p className="text-gray-500 text-sm mt-1">Enter your credentials to access your account</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Sign in</h1>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Enter your credentials to access your account</p>
           </div>
 
           {error && (
-            <div className="flex items-start gap-3 bg-red-50 border border-red-100 text-red-700 p-3.5 rounded-xl mb-5">
+            <div className="flex items-start gap-3 bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-700 text-red-700 dark:text-red-400 p-3.5 rounded-xl mb-5">
               <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -183,7 +183,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
             Don&apos;t have an account?{' '}
             <Link href="/register" className="font-semibold hover:underline" style={{ color: 'var(--color-primary)' }}>
               Create one

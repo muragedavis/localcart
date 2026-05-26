@@ -277,7 +277,7 @@ export default function AdminSettings() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       {/* Page Header */}
       <div className="bg-white border-b border-gray-200">

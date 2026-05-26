@@ -53,7 +53,7 @@ export default function ProfilePage() {
   const formatAmount = (v: number | string) => Number(v).toFixed(2);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="container py-10">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">My Account</h1>

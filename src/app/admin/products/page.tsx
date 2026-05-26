@@ -208,7 +208,7 @@ export default function AdminProducts() {
   if (loading) return <div className="container py-20 text-center text-gray-500">Loading products...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       {/* Header */}
       <div className="bg-white border-b border-gray-200">

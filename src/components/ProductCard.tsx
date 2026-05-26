@@ -18,9 +18,9 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   const inStock = product.stock_quantity === undefined || product.stock_quantity > 0;
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 hover:border-gray-200 transition-all duration-300 flex flex-col">
+    <div className="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:-translate-y-1 hover:border-gray-200 dark:hover:border-gray-600 transition-all duration-300 flex flex-col">
       {/* Image */}
-      <div className="relative w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden shrink-0">
+      <div className="relative w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 overflow-hidden shrink-0">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -31,7 +31,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <svg className="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-12 h-12 text-gray-200 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
@@ -50,12 +50,12 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-semibold text-gray-900 mb-1.5 line-clamp-1 text-[15px]">{product.name}</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1.5 line-clamp-1 text-[15px]">{product.name}</h3>
         {product.description && (
           <p className="text-gray-400 text-xs mb-4 line-clamp-2 flex-1 leading-relaxed">{product.description}</p>
         )}
-        <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
-          <span className="text-lg font-bold text-gray-900">{formatPrice(product.price)}</span>
+        <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50 dark:border-gray-700">
+          <span className="text-lg font-bold text-gray-900 dark:text-gray-100">{formatPrice(product.price)}</span>
           <button
             onClick={() => onAddToCart(product)}
             disabled={!inStock}

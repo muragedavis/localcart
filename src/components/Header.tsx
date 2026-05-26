@@ -38,8 +38,8 @@ export default function Header({ settings }: HeaderProps) {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'backdrop-blur-xl bg-white/80 shadow-sm border-b border-gray-100/80'
-          : 'bg-white border-b border-gray-100'
+          ? 'backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 shadow-sm border-b border-gray-100/80 dark:border-gray-800/80'
+          : 'bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800'
       }`}
       style={{ color: 'var(--color-header-text)' }}
     >
@@ -55,7 +55,7 @@ export default function Header({ settings }: HeaderProps) {
                 style={{ background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))` }}>
                 {settings.site_name.slice(0, 2).toUpperCase()}
               </div>
-              <span className="font-bold text-base text-gray-900">{settings.site_name}</span>
+              <span className="font-bold text-base text-gray-900 dark:text-gray-100">{settings.site_name}</span>
             </>
           )}
         </Link>
@@ -64,7 +64,7 @@ export default function Header({ settings }: HeaderProps) {
         <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link key={link.label} href={link.href}
-              className="px-3.5 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-150">
+              className="px-3.5 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-150">
               {link.label}
             </Link>
           ))}
@@ -76,7 +76,7 @@ export default function Header({ settings }: HeaderProps) {
 
           {/* Cart */}
           <Link href="/cart"
-            className="relative flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-lg transition-all duration-150">
+            className="relative flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800 px-3 py-2 rounded-lg transition-all duration-150">
             <span className="relative">
               <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -101,18 +101,18 @@ export default function Header({ settings }: HeaderProps) {
                 </Link>
               )}
               <Link href="/profile"
-                className="text-sm font-medium text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                 {user.full_name}
               </Link>
               <button onClick={logout}
-                className="text-sm font-medium px-3.5 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150">
+                className="text-sm font-medium px-3.5 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-150">
                 Sign out
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               <Link href="/login"
-                className="text-sm font-medium text-gray-700 px-3.5 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 px-3.5 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                 Sign in
               </Link>
               <Link href="/register"
@@ -126,8 +126,8 @@ export default function Header({ settings }: HeaderProps) {
 
         {/* Mobile */}
         <div className="md:hidden flex items-center gap-2">
-          <Link href="/cart" className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
-            <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Link href="/cart" className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             {cartCount > 0 && (
@@ -138,7 +138,7 @@ export default function Header({ settings }: HeaderProps) {
             )}
           </Link>
           <ThemeToggle />
-          <button className="p-2 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen
               ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               : <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -149,16 +149,16 @@ export default function Header({ settings }: HeaderProps) {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-xl">
+        <div className="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl">
           <div className="container py-3 space-y-0.5">
             {navLinks.map((link) => (
               <Link key={link.label} href={link.href}
-                className="block px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                className="block px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 onClick={() => setMenuOpen(false)}>
                 {link.label}
               </Link>
             ))}
-            <div className="h-px bg-gray-100 my-2" />
+            <div className="h-px bg-gray-100 dark:bg-gray-700 my-2" />
             {user ? (
               <>
                 {user.role === 'admin' && (
@@ -167,19 +167,19 @@ export default function Header({ settings }: HeaderProps) {
                     Admin Dashboard
                   </Link>
                 )}
-                <Link href="/profile" className="block px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                <Link href="/profile" className="block px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   onClick={() => setMenuOpen(false)}>
                   {user.full_name}
                 </Link>
                 <button onClick={() => { logout(); setMenuOpen(false); }}
-                  className="w-full text-left px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                  className="w-full text-left px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
                   Sign out
                 </button>
               </>
             ) : (
               <div className="flex gap-2 pt-1">
                 <Link href="/login"
-                  className="flex-1 text-center py-2.5 text-sm font-medium border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors"
+                  className="flex-1 text-center py-2.5 text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-colors"
                   onClick={() => setMenuOpen(false)}>
                   Sign in
                 </Link>
