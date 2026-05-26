@@ -7,28 +7,40 @@ export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  useEffect(() => { setMounted(true); }, []);
   if (!mounted) return null;
+
+  const isDark = theme === 'dark';
 
   return (
     <button
       onClick={toggleTheme}
-      className="relative inline-flex items-center justify-center p-2 rounded-lg transition-all duration-300
-        bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600
-        text-gray-700 dark:text-slate-200 hover:shadow-md"
-      aria-label="Toggle theme"
-      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      className="relative w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105"
+      style={{
+        background: isDark ? 'rgba(99,102,241,0.15)' : '#f3f4f6',
+        color: isDark ? '#a5b4fc' : '#6b7280',
+        border: isDark ? '1px solid rgba(99,102,241,0.25)' : '1px solid transparent',
+      }}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
-      {theme === 'light' ? (
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+      {/* Sun — shown in dark mode */}
+      {isDark ? (
+        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4" />
+          <line x1="12" y1="2"  x2="12" y2="4" />
+          <line x1="12" y1="20" x2="12" y2="22" />
+          <line x1="4.22" y1="4.22"  x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="2"  y1="12" x2="4"  y2="12" />
+          <line x1="20" y1="12" x2="22" y2="12" />
+          <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36" />
+          <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22" />
         </svg>
       ) : (
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l-2.121-2.121a.5.5 0 00-.707 0l-.707.707-2.121-2.121a.5.5 0 00-.707 0l-.707.707 2.121 2.121a.5.5 0 000 .707l.707.707-2.121 2.121a.5.5 0 000 .707l.707.707 2.121-2.121a.5.5 0 00.707 0l.707-.707 2.121 2.121a.5.5 0 00.707 0l.707-.707-2.121-2.121a.5.5 0 000-.707l-.707-.707 2.121-2.121a.5.5 0 000-.707l-.707-.707zm2.828-8.104a1 1 0 011.415 0l.707.707a1 1 0 11-1.415 1.415l-.707-.707a1 1 0 010-1.415zm2.828 8.104a1 1 0 011.415 0l.707.707a1 1 0 11-1.415 1.415l-.707-.707a1 1 0 010-1.415zm-8.59-8.59a1 1 0 011.415 0l.707.707a1 1 0 11-1.415 1.415l-.707-.707a1 1 0 010-1.415zM9 11a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm5.414-5.414a1 1 0 011.415 0l.707.707a1 1 0 11-1.415 1.415l-.707-.707a1 1 0 010-1.415zM3 17a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm9-16a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm5.414 14.414a1 1 0 011.415 0l.707.707a1 1 0 11-1.415 1.415l-.707-.707a1 1 0 010-1.415zm-8.59-8.59a1 1 0 011.415 0l.707.707a1 1 0 11-1.415 1.415l-.707-.707a1 1 0 010-1.415z" clipRule="evenodd" />
+        /* Moon — shown in light mode */
+        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
         </svg>
       )}
     </button>
