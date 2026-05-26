@@ -20,10 +20,14 @@ export default function Header({ settings }: HeaderProps) {
   const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
   const [isHydrated, setIsHydrated] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     hydrate();
     setIsHydrated(true);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, [hydrate]);
 
   if (!isHydrated) return null;
@@ -31,107 +35,110 @@ export default function Header({ settings }: HeaderProps) {
   const navLinks = parseLinks(settings.nav_links);
 
   return (
-    <header className="border-b border-gray-100 dark:border-slate-700 sticky top-0 z-50 transition-colors duration-300"
-      style={{ backgroundColor: 'var(--color-header-bg)', color: 'var(--color-header-text)' }}>
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'backdrop-blur-xl bg-white/80 shadow-sm border-b border-gray-100/80'
+          : 'bg-white border-b border-gray-100'
+      }`}
+      style={{ color: 'var(--color-header-text)' }}
+    >
       <div className="container flex items-center justify-between h-16">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 shrink-0">
+        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
           {settings.logo_url ? (
             <Image src={settings.logo_url} alt={settings.site_name} width={120} height={40} className="h-8 w-auto object-contain" />
           ) : (
             <>
-              <div className="w-8 h-8 flex items-center justify-center text-white text-xs font-black tracking-wider"
-                style={{ backgroundColor: 'var(--color-primary)' }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shadow-sm transition-shadow group-hover:shadow-md"
+                style={{ background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))` }}>
                 {settings.site_name.slice(0, 2).toUpperCase()}
               </div>
-              <span className="font-black text-sm tracking-widest uppercase text-gray-900 dark:text-slate-100">{settings.site_name}</span>
+              <span className="font-bold text-base text-gray-900">{settings.site_name}</span>
             </>
           )}
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link key={link.label} href={link.href}
-              className="text-xs font-bold tracking-widest uppercase text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 transition-colors relative group">
+              className="px-3.5 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-150">
               {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] group-hover:w-full transition-all duration-200"
-                style={{ backgroundColor: 'var(--color-primary)' }} />
             </Link>
           ))}
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-4">
-          {/* Theme Toggle */}
+        <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
 
           {/* Cart */}
           <Link href="/cart"
-            className="relative flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 px-3 py-2 transition-colors">
+            className="relative flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-lg transition-all duration-150">
             <span className="relative">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] text-[10px] font-black text-white flex items-center justify-center px-1"
-                  style={{ backgroundColor: 'var(--color-primary)' }}>
+                <span className="absolute -top-2 -right-2 min-w-[17px] h-[17px] text-[9px] font-bold text-white rounded-full flex items-center justify-center px-0.5 shadow-sm"
+                  style={{ background: 'var(--color-primary)' }}>
                   {cartCount > 99 ? '99+' : cartCount}
                 </span>
               )}
             </span>
-            <span>Cart</span>
+            <span className="text-sm">Cart</span>
           </Link>
 
           {user ? (
-            <>
+            <div className="flex items-center gap-2">
               {user.role === 'admin' && (
                 <Link href="/admin"
-                  className="text-xs font-black tracking-widest uppercase px-4 py-2 text-white transition-all duration-200 hover:opacity-80 rounded-lg"
-                  style={{ backgroundColor: 'var(--color-primary)' }}>
+                  className="text-sm font-semibold px-3.5 py-2 rounded-lg text-white shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-px"
+                  style={{ background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))` }}>
                   Admin
                 </Link>
               )}
               <Link href="/profile"
-                className="text-xs font-bold tracking-widest uppercase text-gray-700 dark:text-slate-300 px-3 py-2 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
+                className="text-sm font-medium text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
                 {user.full_name}
               </Link>
               <button onClick={logout}
-                className="text-xs font-black tracking-widest uppercase px-4 py-2 border-2 border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:border-gray-900 dark:hover:border-slate-400 hover:text-gray-900 dark:hover:text-slate-100 transition-all duration-200 rounded-lg">
-                Logout
+                className="text-sm font-medium px-3.5 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150">
+                Sign out
               </button>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="flex items-center gap-2">
               <Link href="/login"
-                className="text-xs font-black tracking-widest uppercase px-4 py-2 text-gray-700 dark:text-slate-300 hover:text-gray-900 dark:hover:text-slate-100 transition-colors">
-                Login
+                className="text-sm font-medium text-gray-700 px-3.5 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                Sign in
               </Link>
               <Link href="/register"
-                className="text-xs font-black tracking-widest uppercase px-5 py-2 text-white transition-all duration-200 hover:opacity-80 rounded-lg"
-                style={{ backgroundColor: 'var(--color-primary)' }}>
-                Register
+                className="text-sm font-semibold px-4 py-2 rounded-xl text-white shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-px"
+                style={{ background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))` }}>
+                Get Started
               </Link>
-            </>
+            </div>
           )}
         </div>
 
-        {/* Mobile: cart + theme toggle + hamburger */}
-        <div className="md:hidden flex items-center gap-3">
-          <Link href="/cart" className="relative p-2">
-            <svg className="w-5 h-5 text-gray-700 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        {/* Mobile */}
+        <div className="md:hidden flex items-center gap-2">
+          <Link href="/cart" className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
+            <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             {cartCount > 0 && (
-              <span className="absolute top-0 right-0 min-w-[16px] h-4 text-[9px] font-black text-white flex items-center justify-center"
-                style={{ backgroundColor: 'var(--color-primary)' }}>
-                {cartCount > 99 ? '99+' : cartCount}
+              <span className="absolute top-1 right-1 min-w-[14px] h-3.5 text-[8px] font-bold text-white rounded-full flex items-center justify-center"
+                style={{ background: 'var(--color-primary)' }}>
+                {cartCount}
               </span>
             )}
           </Link>
           <ThemeToggle />
-          <button className="p-2 text-gray-700 dark:text-slate-300" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="p-2 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen
               ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               : <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -142,49 +149,45 @@ export default function Header({ settings }: HeaderProps) {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-gray-100 dark:border-slate-700 transition-colors duration-300"
-          style={{ backgroundColor: 'var(--color-header-bg)' }}>
-          <div className="container py-4 space-y-1">
+        <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-xl">
+          <div className="container py-3 space-y-0.5">
             {navLinks.map((link) => (
               <Link key={link.label} href={link.href}
-                className="block px-3 py-3 text-xs font-bold tracking-widest uppercase text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+                className="block px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setMenuOpen(false)}>
                 {link.label}
               </Link>
             ))}
+            <div className="h-px bg-gray-100 my-2" />
             {user ? (
               <>
                 {user.role === 'admin' && (
-                  <Link href="/admin"
-                    className="block px-3 py-3 text-xs font-bold tracking-widest uppercase hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors rounded-lg"
-                    style={{ color: 'var(--color-primary)' }}
-                    onClick={() => setMenuOpen(false)}>
+                  <Link href="/admin" className="block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors"
+                    style={{ color: 'var(--color-primary)' }} onClick={() => setMenuOpen(false)}>
                     Admin Dashboard
                   </Link>
                 )}
-                <Link href="/profile"
-                  className="block px-3 py-3 text-xs font-bold tracking-widest uppercase text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+                <Link href="/profile" className="block px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                   onClick={() => setMenuOpen(false)}>
                   {user.full_name}
                 </Link>
-                <button
-                  onClick={() => { logout(); setMenuOpen(false); }}
-                  className="w-full text-left px-3 py-3 text-xs font-bold tracking-widest uppercase text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">
-                  Logout
+                <button onClick={() => { logout(); setMenuOpen(false); }}
+                  className="w-full text-left px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                  Sign out
                 </button>
               </>
             ) : (
-              <div className="flex gap-2 pt-2">
+              <div className="flex gap-2 pt-1">
                 <Link href="/login"
-                  className="flex-1 text-center py-3 text-xs font-black tracking-widest uppercase border-2 border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:border-gray-900 dark:hover:border-slate-400 hover:text-gray-900 dark:hover:text-slate-100 transition-all rounded-lg"
+                  className="flex-1 text-center py-2.5 text-sm font-medium border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl transition-colors"
                   onClick={() => setMenuOpen(false)}>
-                  Login
+                  Sign in
                 </Link>
                 <Link href="/register"
-                  className="flex-1 text-center py-3 text-xs font-black tracking-widest uppercase text-white transition-all hover:opacity-80 rounded-lg"
-                  style={{ backgroundColor: 'var(--color-primary)' }}
+                  className="flex-1 text-center py-2.5 text-sm font-semibold text-white rounded-xl transition-all hover:opacity-90 shadow-sm"
+                  style={{ background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))` }}
                   onClick={() => setMenuOpen(false)}>
-                  Register
+                  Get Started
                 </Link>
               </div>
             )}

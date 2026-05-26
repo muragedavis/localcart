@@ -18,16 +18,16 @@ interface Product {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white border border-gray-100 overflow-hidden">
-      <div className="skeleton h-60 w-full" />
+    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="skeleton h-56 w-full rounded-none" />
       <div className="p-5 space-y-3">
         <div className="skeleton h-3 w-1/3" />
         <div className="skeleton h-4 w-3/4" />
         <div className="skeleton h-3 w-full" />
         <div className="skeleton h-3 w-2/3" />
-        <div className="flex justify-between items-center pt-2">
+        <div className="flex justify-between items-center pt-3 mt-2 border-t border-gray-50">
           <div className="skeleton h-6 w-20" />
-          <div className="skeleton h-8 w-24" />
+          <div className="skeleton h-8 w-24 rounded-xl" />
         </div>
       </div>
     </div>
@@ -84,17 +84,18 @@ export default function ShopPage() {
     <div>
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       {/* Header banner */}
-      <div className="bg-[#0a0a0a] text-white">
-        <div className="container py-16 md:py-20">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
-            <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-gray-500">
-              {loading ? 'Loading...' : `${filtered.length} product${filtered.length !== 1 ? 's' : ''} available`}
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase text-white leading-none">
-            Shop<br />
-            <span style={{ color: 'var(--color-primary)' }}>Everything.</span>
+      <div className="relative overflow-hidden"
+        style={{ background: `linear-gradient(160deg, var(--color-hero-bg) 0%, color-mix(in srgb, var(--color-hero-bg) 80%, var(--color-primary)) 100%)` }}>
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full opacity-20"
+          style={{ background: `radial-gradient(circle, var(--color-primary), transparent)`, filter: 'blur(40px)' }} />
+        <div className="container relative z-10 py-14 md:py-20">
+          <span className="inline-block text-xs font-medium px-3 py-1 rounded-full mb-5 text-white/50 border border-white/10 bg-white/5">
+            {loading ? 'Loading products…' : `${filtered.length} product${filtered.length !== 1 ? 's' : ''} available`}
+          </span>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            Shop <span style={{ background: `linear-gradient(90deg, var(--color-primary), var(--color-secondary))`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Everything.</span>
           </h1>
         </div>
       </div>
@@ -130,12 +131,12 @@ export default function ShopPage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 text-[10px] font-black tracking-widest uppercase transition-all duration-200 ${
+                className={`px-4 py-2 text-xs font-semibold rounded-full transition-all duration-150 ${
                   activeCategory === cat
-                    ? 'text-white'
-                    : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-gray-900 hover:text-gray-900'
+                    ? 'text-white shadow-sm'
+                    : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
-                style={activeCategory === cat ? { backgroundColor: 'var(--color-primary)' } : {}}
+                style={activeCategory === cat ? { background: `linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))` } : {}}
               >
                 {cat}
               </button>
@@ -157,7 +158,7 @@ export default function ShopPage() {
 
         {/* Skeleton grid */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-gray-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
           </div>
         )}
@@ -177,7 +178,7 @@ export default function ShopPage() {
 
         {/* Product grid */}
         {!loading && !error && filtered.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-gray-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {filtered.map((product) => (
               <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
             ))}
