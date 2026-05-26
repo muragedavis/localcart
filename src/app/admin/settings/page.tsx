@@ -10,7 +10,7 @@ import { SETTING_DEFAULTS } from '@/lib/settings-shared';
 import type { SiteSettings } from '@/lib/settings-shared';
 import { ToastContainer, useToast } from '@/components/Toast';
 
-type Tab = 'brand' | 'colors' | 'currency' | 'store' | 'nav' | 'hero' | 'landing' | 'footer';
+type Tab = 'brand' | 'colors' | 'currency' | 'store' | 'nav' | 'hero' | 'landing' | 'social_proof' | 'footer';
 
 /* ─── Helpers ─────────────────────────────────────────────── */
 
@@ -86,6 +86,87 @@ function LinksEditor({ label, value, onChange }: { label: string; value: string;
         ))}
         <button type="button" onClick={() => update([...links, { label: '', href: '#' }])} className="text-sm font-medium" style={{ color: 'var(--color-primary)' }}>+ Add link</button>
       </div>
+    </div>
+  );
+}
+
+interface TestimonialItem { name: string; role: string; location: string; text: string; rating: number; initials: string; accentColor: string; }
+function TestimonialsEditor({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [items, setItems] = useState<TestimonialItem[]>([]);
+  useEffect(() => { try { setItems(JSON.parse(value)); } catch { setItems([]); } }, [value]);
+  const update = (updated: TestimonialItem[]) => { setItems(updated); onChange(JSON.stringify(updated)); };
+  return (
+    <div className="space-y-3">
+      {items.map((item, i) => (
+        <div key={i} className="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700">Testimonial {i + 1}</span>
+            <button type="button" onClick={() => update(items.filter((_, j) => j !== i))} className="text-red-400 hover:text-red-600 text-xs">Remove</button>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Name</label>
+              <input type="text" value={item.name} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, name: e.target.value } : x))} className="form-input text-sm py-1.5" />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Role</label>
+              <input type="text" value={item.role} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, role: e.target.value } : x))} className="form-input text-sm py-1.5" />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Location</label>
+              <input type="text" value={item.location} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, location: e.target.value } : x))} className="form-input text-sm py-1.5" />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Initials (2 chars)</label>
+              <input type="text" value={item.initials} maxLength={2} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, initials: e.target.value.toUpperCase() } : x))} className="form-input text-sm py-1.5" />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Rating (1–5)</label>
+              <input type="number" min={1} max={5} value={item.rating} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, rating: Number(e.target.value) } : x))} className="form-input text-sm py-1.5" />
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-3">
+            <div className="col-span-3">
+              <label className="block text-xs text-gray-500 mb-1">Quote / Testimonial Text</label>
+              <textarea value={item.text} rows={2} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, text: e.target.value } : x))} className="form-input text-sm py-1.5 resize-none" />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Avatar Color</label>
+              <div className="flex items-center gap-2 mt-1">
+                <input type="color" value={item.accentColor || '#3B82F6'} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, accentColor: e.target.value } : x))} className="w-10 h-9 rounded border border-gray-200 cursor-pointer p-0.5 bg-white" />
+                <div className="w-9 h-9 rounded flex items-center justify-center text-white text-xs font-black" style={{ backgroundColor: item.accentColor || '#3B82F6' }}>{item.initials}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+      <button type="button" onClick={() => update([...items, { name: '', role: '', location: '', text: '', rating: 5, initials: 'XX', accentColor: '#3B82F6' }])} className="text-sm font-medium" style={{ color: 'var(--color-primary)' }}>+ Add Testimonial</button>
+    </div>
+  );
+}
+
+interface PartnerItem { name: string; abbr: string; }
+function PartnersEditor({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [items, setItems] = useState<PartnerItem[]>([]);
+  useEffect(() => { try { setItems(JSON.parse(value)); } catch { setItems([]); } }, [value]);
+  const update = (updated: PartnerItem[]) => { setItems(updated); onChange(JSON.stringify(updated)); };
+  return (
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={i} className="flex items-center gap-3">
+          <input type="text" placeholder="Company name" value={item.name} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, name: e.target.value } : x))} className="form-input text-sm py-1.5 flex-1" />
+          <input type="text" placeholder="Abbr (2-3 chars)" value={item.abbr} maxLength={4} onChange={(e) => update(items.map((x, j) => j === i ? { ...x, abbr: e.target.value.toUpperCase() } : x))} className="form-input text-sm py-1.5 w-28" />
+          <div className="w-10 h-10 bg-gray-100 flex items-center justify-center shrink-0 rounded">
+            <span className="text-xs font-black text-gray-600">{item.abbr || '?'}</span>
+          </div>
+          <button type="button" onClick={() => update(items.filter((_, j) => j !== i))} className="text-red-400 hover:text-red-600 shrink-0">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      ))}
+      <button type="button" onClick={() => update([...items, { name: '', abbr: '' }])} className="text-sm font-medium" style={{ color: 'var(--color-primary)' }}>+ Add Partner</button>
     </div>
   );
 }
@@ -183,6 +264,7 @@ export default function AdminSettings() {
     { id: 'nav', label: 'Navigation', icon: '🔗' },
     { id: 'hero', label: 'Hero Section', icon: '🖼️' },
     { id: 'landing', label: 'Landing Page', icon: '📰' },
+    { id: 'social_proof', label: 'Social Proof', icon: '⭐' },
     { id: 'footer', label: 'Footer', icon: '📋' },
   ];
 
@@ -277,6 +359,43 @@ export default function AdminSettings() {
                   <ColorInput label="Primary Color" hint="Buttons, links, highlights" value={settings.primary_color} onChange={(v) => set('primary_color', v)} />
                   <ColorInput label="Secondary Color" hint="Gradients, accents" value={settings.secondary_color} onChange={(v) => set('secondary_color', v)} />
                   <ColorInput label="Accent Color" hint="Warnings, badges" value={settings.accent_color} onChange={(v) => set('accent_color', v)} />
+                </div>
+                <hr className="border-gray-100" />
+                <div>
+                  <h3 className="text-base font-semibold mb-1">Appearance Colors</h3>
+                  <p className="text-sm text-gray-500 mb-5">Controls the background and text colors of key layout sections.</p>
+                  <div className="space-y-6">
+                    <ColorInput label="Header Background" hint="Background color of the top navigation bar" value={settings.header_bg_color || '#ffffff'} onChange={(v) => set('header_bg_color', v)} />
+                    <ColorInput label="Header Text Color" hint="Text/icon color inside the header" value={settings.header_text_color || '#111111'} onChange={(v) => set('header_text_color', v)} />
+                    <ColorInput label="Dark Section Background" hint="Hero, testimonials, support visual, and CTA section backgrounds" value={settings.hero_bg_color || '#0a0a0a'} onChange={(v) => set('hero_bg_color', v)} />
+                  </div>
+                  {/* Header preview */}
+                  <div className="mt-6">
+                    <p className="text-sm font-medium text-gray-700 mb-3">Header Preview</p>
+                    <div className="border border-gray-200 rounded-xl overflow-hidden">
+                      <div className="px-5 h-14 flex items-center justify-between"
+                        style={{ backgroundColor: settings.header_bg_color || '#ffffff', color: settings.header_text_color || '#111111' }}>
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: settings.primary_color }}>{settings.site_name.slice(0, 2).toUpperCase()}</div>
+                          <span className="font-bold text-sm">{settings.site_name}</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-xs font-bold opacity-70">
+                          <span>Home</span><span>Shop</span>
+                        </div>
+                        <span className="text-xs px-3 py-1.5 rounded font-bold text-white" style={{ backgroundColor: settings.primary_color }}>Register</span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Dark section preview */}
+                  <div className="mt-6">
+                    <p className="text-sm font-medium text-gray-700 mb-3">Dark Section Preview</p>
+                    <div className="rounded-xl overflow-hidden p-8 flex flex-col gap-2"
+                      style={{ backgroundColor: settings.hero_bg_color || '#0a0a0a' }}>
+                      <p className="text-white font-black text-2xl uppercase tracking-tighter">Shop Local,</p>
+                      <p className="font-black text-2xl uppercase tracking-tighter" style={{ color: settings.primary_color }}>Think Big.</p>
+                      <p className="text-gray-400 text-sm mt-1">Hero · Testimonials · Support · CTA use this background.</p>
+                    </div>
+                  </div>
                 </div>
                 <hr className="border-gray-100" />
                 <div>
@@ -579,6 +698,72 @@ export default function AdminSettings() {
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
                     <input type="text" value={settings.cta_subtitle} onChange={(e) => set('cta_subtitle', e.target.value)} className="form-input" />
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── Social Proof ── */}
+            {activeTab === 'social_proof' && (
+              <div className="space-y-10">
+                <div><h2 className="text-lg font-semibold mb-1">Social Proof</h2><p className="text-sm text-gray-500">Manage testimonials and trusted partner logos shown on the homepage.</p></div>
+
+                {/* Testimonials */}
+                <div className="space-y-5 p-5 border border-gray-200 rounded-xl">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Customer Testimonials</h3>
+                      <p className="text-xs text-gray-400 mt-0.5">Reviews displayed in the &ldquo;What People Are Saying&rdquo; section.</p>
+                    </div>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <div className="relative">
+                        <input type="checkbox" checked={settings.testimonials_enabled === 'true'} onChange={(e) => set('testimonials_enabled', e.target.checked ? 'true' : 'false')} className="sr-only" />
+                        <div className="w-10 h-5 rounded-full transition-colors" style={{ backgroundColor: settings.testimonials_enabled === 'true' ? 'var(--color-primary)' : '#D1D5DB' }} />
+                        <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${settings.testimonials_enabled === 'true' ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                      </div>
+                      <span className="text-sm text-gray-600">{settings.testimonials_enabled === 'true' ? 'Visible' : 'Hidden'}</span>
+                    </label>
+                  </div>
+                  <TestimonialsEditor value={settings.testimonials_items} onChange={(v) => set('testimonials_items', v)} />
+                </div>
+
+                {/* Partners */}
+                <div className="space-y-5 p-5 border border-gray-200 rounded-xl">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Trusted Partners</h3>
+                      <p className="text-xs text-gray-400 mt-0.5">Brand logos shown in the &ldquo;Brands We Work With&rdquo; section.</p>
+                    </div>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <div className="relative">
+                        <input type="checkbox" checked={settings.partners_enabled === 'true'} onChange={(e) => set('partners_enabled', e.target.checked ? 'true' : 'false')} className="sr-only" />
+                        <div className="w-10 h-5 rounded-full transition-colors" style={{ backgroundColor: settings.partners_enabled === 'true' ? 'var(--color-primary)' : '#D1D5DB' }} />
+                        <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${settings.partners_enabled === 'true' ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                      </div>
+                      <span className="text-sm text-gray-600">{settings.partners_enabled === 'true' ? 'Visible' : 'Hidden'}</span>
+                    </label>
+                  </div>
+                  <PartnersEditor value={settings.partners_items} onChange={(v) => set('partners_items', v)} />
+                  {/* Preview */}
+                  {settings.partners_enabled === 'true' && (() => {
+                    try {
+                      const items: Array<{ name: string; abbr: string }> = JSON.parse(settings.partners_items);
+                      return items.length > 0 ? (
+                        <div>
+                          <p className="text-sm font-medium text-gray-700 mb-3">Preview</p>
+                          <div className="grid grid-cols-6 gap-2">
+                            {items.slice(0, 6).map((p) => (
+                              <div key={p.name} className="bg-gray-50 border border-gray-200 rounded py-4 flex flex-col items-center gap-1">
+                                <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
+                                  <span className="text-xs font-black text-gray-600">{p.abbr}</span>
+                                </div>
+                                <span className="text-[9px] font-bold uppercase tracking-wide text-gray-400 text-center leading-tight">{p.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null;
+                    } catch { return null; }
+                  })()}
                 </div>
               </div>
             )}

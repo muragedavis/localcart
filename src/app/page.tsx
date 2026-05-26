@@ -1,250 +1,384 @@
 'use client';
 
 import Link from 'next/link';
+import { useSettings } from '@/lib/settings-context';
 
-const features = [
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    ),
-    title: 'Lightning Fast',
-    desc: 'Optimized for speed on any device. Browse and checkout without delays.',
-  },
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      </svg>
-    ),
-    title: 'Secure & Safe',
-    desc: 'Your data is protected with modern security and encrypted transactions.',
-  },
-  {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-      </svg>
-    ),
-    title: 'Mobile Friendly',
-    desc: 'Shop anywhere, anytime. Seamless experience across all your devices.',
-  },
-];
+interface StatItem { value: string; label: string; }
+interface FeatureItem { icon: string; title: string; desc: string; }
+interface TestimonialItem {
+  name: string; role: string; location: string;
+  text: string; rating: number; initials: string; accentColor: string;
+}
+interface PartnerItem { name: string; abbr: string; }
 
-const stats = [
-  { value: '5K+', label: 'Products' },
-  { value: '10K+', label: 'Happy Customers' },
-  { value: '50K+', label: 'Orders Delivered' },
-  { value: '99%', label: 'Satisfaction Rate' },
-];
+function parse<T>(raw: string, fallback: T[]): T[] {
+  try { return JSON.parse(raw) as T[]; } catch { return fallback; }
+}
+
+function StarRating({ count }: { count: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: Math.min(count, 5) }).map((_, i) => (
+        <svg key={i} className="w-4 h-4 fill-amber-400 text-amber-400" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
+  const settings = useSettings();
+
+  const stats = parse<StatItem>(settings.stats_items, []);
+  const testimonials = parse<TestimonialItem>(settings.testimonials_items, []);
+  const partners = parse<PartnerItem>(settings.partners_items, []);
+
+  const showTestimonials = settings.testimonials_enabled === 'true' && testimonials.length > 0;
+  const showPartners = settings.partners_enabled === 'true' && partners.length > 0;
+  const showStats = settings.stats_enabled === 'true' && stats.length > 0;
+
   return (
     <div className="overflow-x-hidden">
-      {/* ── Hero ── */}
-      <section className="relative min-h-[580px] flex items-center overflow-hidden text-white"
-        style={{ background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)' }}>
-        {/* Background shapes */}
+
+      {/* ── HERO ── */}
+      <section
+        className="relative min-h-screen flex items-center overflow-hidden"
+        style={{ backgroundColor: 'var(--color-hero-bg)' }}>
+        {/* Background glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/3 -right-1/4 w-[700px] h-[700px] rounded-full bg-white/5" />
-          <div className="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] rounded-full bg-white/5" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-white/[0.03]" />
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] opacity-[0.06]"
+            style={{ background: 'radial-gradient(circle, var(--color-primary) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] opacity-[0.04]"
+            style={{ background: 'radial-gradient(circle, var(--color-secondary) 0%, transparent 70%)' }} />
+          <div className="absolute inset-0 opacity-[0.025]"
+            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
         </div>
 
-        <div className="container relative z-10 py-20 text-center">
-          <span className="inline-block px-4 py-1.5 bg-white/15 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-white/20">
-            Free shipping on all orders
-          </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-5 leading-[1.08]">
-            Shop local,<br />
-            <span className="text-white/80">shop smart.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-white/75 mb-10 max-w-xl mx-auto leading-relaxed">
-            Fast, modern online shopping built for local businesses and their communities.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/shop"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white font-semibold rounded-xl text-base shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
-              style={{ color: 'var(--color-primary)' }}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              Start Shopping
-            </Link>
-            <Link
-              href="/register"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/10 text-white font-semibold rounded-xl text-base border border-white/25 hover:bg-white/20 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur-sm"
-            >
-              Create Account
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Stats bar ── */}
-      <section className="border-b border-gray-100 bg-white">
-        <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
-            {stats.map((s) => (
-              <div key={s.label} className="py-8 text-center">
-                <p className="text-3xl font-extrabold text-gray-900">{s.value}</p>
-                <p className="text-sm text-gray-500 mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Features ── */}
-      <section className="section bg-gray-50">
-        <div className="container">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Why LocalCart?</h2>
-            <p className="text-gray-500 max-w-md mx-auto">Everything you need for a smooth shopping experience, built in from day one.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {features.map((f) => (
-              <div key={f.title} className="card-hover p-8">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 text-white"
-                  style={{ backgroundColor: 'var(--color-primary)' }}>
-                  {f.icon}
-                </div>
-                <h3 className="font-bold text-lg text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Products preview ── */}
-      <section className="section bg-gray-50">
-        <div className="container">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">Featured Products</h2>
-              <p className="text-gray-500 text-sm">Handpicked for you</p>
+        <div className="container relative z-10 py-32 md:py-40">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-2 mb-8">
+              <span className="w-8 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+              <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-400">
+                {settings.site_tagline}
+              </span>
             </div>
-            <Link href="/shop" className="text-sm font-semibold hover:underline flex items-center gap-1 transition-colors"
-              style={{ color: 'var(--color-primary)' }}>
-              View all
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
+
+            <h1 className="text-[clamp(3rem,10vw,7rem)] font-black leading-[0.9] tracking-tighter text-white mb-8 uppercase whitespace-pre-line">
+              {settings.hero_title || 'Shop Local,\nThink Big.'}
+            </h1>
+
+            <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-lg leading-relaxed font-light">
+              {settings.hero_subtitle}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/shop"
+                className="inline-flex items-center justify-center gap-3 px-10 py-4 text-sm font-black tracking-widest uppercase text-black bg-white rounded-lg hover:bg-gray-100 transition-all duration-200">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                {settings.hero_cta_text || 'Shop Now'}
+              </Link>
+              <Link href="/register"
+                className="inline-flex items-center justify-center gap-3 px-10 py-4 text-sm font-black tracking-widest uppercase text-white rounded-lg border-2 border-white/20 hover:border-white/60 transition-all duration-200">
+                Create Account
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="card-hover p-0 overflow-hidden">
-                <div className="h-44 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                  <svg className="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <div className="p-4">
-                  <span className="badge badge-gray mb-2">Category</span>
-                  <h3 className="font-semibold text-gray-900 mb-1">Product {i}</h3>
-                  <p className="text-gray-400 text-xs mb-3">High quality product description</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-gray-900">$29.99</span>
-                    <Link href="/shop" className="btn-primary text-xs px-3 py-2">Shop</Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+          <span className="text-[10px] tracking-widest uppercase text-gray-600">Scroll</span>
+          <div className="w-[1px] h-10 bg-gradient-to-b from-gray-600 to-transparent" />
         </div>
       </section>
 
-      {/* ── Support / WhatsApp CTA ── */}
+      {/* ── STATS BAR ── */}
+      {showStats && (
+        <section className="bg-white border-b border-gray-100">
+          <div className="container">
+            <div className={`grid grid-cols-2 md:grid-cols-${stats.length <= 4 ? stats.length : 4}`}>
+              {stats.map((s, i) => (
+                <div key={s.label}
+                  className={`py-10 px-6 text-center ${i < stats.length - 1 ? 'border-r border-gray-100' : ''}`}>
+                  <p className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter mb-1">{s.value}</p>
+                  <p className="text-xs font-bold tracking-widest uppercase text-gray-400">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── FEATURES ── */}
+      {settings.features_enabled === 'true' && (
+        <section className="section bg-[#f5f5f5]">
+          <div className="container">
+            <div className="mb-16">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-400">Why Choose Us</span>
+              </div>
+              <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tighter uppercase leading-none">
+                {settings.features_title || 'Built For Performance.'}
+              </h2>
+            </div>
+
+            {(() => {
+              const features = parse<FeatureItem>(settings.features_items, []);
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-gray-200">
+                  {features.map((f) => (
+                    <div key={f.title} className="bg-white p-8 group hover:bg-gray-900 transition-all duration-300">
+                      <div className="w-14 h-14 flex items-center justify-center mb-6 text-2xl rounded-lg
+                        group-hover:opacity-90 transition-all duration-300"
+                        style={{ backgroundColor: 'var(--color-primary)' }}>
+                        {f.icon}
+                      </div>
+                      <h3 className="font-black text-base uppercase tracking-wider text-gray-900 mb-3 group-hover:text-white transition-colors">{f.title}</h3>
+                      <p className="text-gray-500 text-sm leading-relaxed group-hover:text-gray-400 transition-colors">{f.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+          </div>
+        </section>
+      )}
+
+      {/* ── FEATURED PRODUCTS ── */}
       <section className="section bg-white">
         <div className="container">
-          <div className="card overflow-hidden p-0">
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              {/* Info side */}
-              <div className="p-10 md:p-12">
-                <span className="badge badge-green mb-4">24/7 Support</span>
-                <h2 className="text-3xl font-bold text-gray-900 mb-3">Need Help?</h2>
-                <p className="text-gray-500 mb-8 leading-relaxed">
-                  Our friendly support team is always ready to assist you with any questions or concerns.
-                </p>
-                <div className="space-y-4">
-                  <a
-                    href="https://wa.me/923001234567?text=Hello%20LocalCart%20Support"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 text-sm"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M20 2C10.059 2 2 10.059 2 20c0 3.294.904 6.384 2.479 9.027L2 38l9.139-2.395A17.93 17.93 0 0020 38c9.941 0 18-8.059 18-18S29.941 2 20 2z" fill="white" fillOpacity=".9"/>
-                      <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" fill="currentColor"/>
-                    </svg>
-                    Chat on WhatsApp
-                  </a>
-                  <div className="flex flex-col gap-2 text-sm text-gray-500">
-                    <span className="flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                      +92 300 123 4567
+          <div className="flex items-end justify-between mb-14">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-400">Handpicked For You</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase leading-none">
+                Featured<br />Products.
+              </h2>
+            </div>
+            <Link href="/shop"
+              className="hidden sm:inline-flex items-center gap-2 text-xs font-black tracking-widest uppercase hover:gap-4 transition-all duration-200"
+              style={{ color: 'var(--color-primary)' }}>
+              View All
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-gray-100">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-white group overflow-hidden rounded-lg">
+                <div className="h-56 bg-[#f5f5f5] flex items-center justify-center overflow-hidden relative">
+                  <svg className="w-16 h-16 text-gray-200 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                  <div className="absolute inset-0 bg-gray-900/0 group-hover:bg-gray-900/5 transition-colors duration-300" />
+                </div>
+                <div className="p-6">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-2">Category</p>
+                  <h3 className="font-black text-gray-900 text-base uppercase tracking-tight mb-1">Product {i}</h3>
+                  <p className="text-gray-400 text-xs mb-4 leading-relaxed">High quality product for everyday use</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl font-black text-gray-900">
+                      {settings.currency_position === 'after' ? `29.99${settings.currency_symbol}` : `${settings.currency_symbol}29.99`}
                     </span>
-                    <span className="flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                      support@localcart.com
-                    </span>
+                    <Link href="/shop"
+                      className="text-xs font-black tracking-widest uppercase px-4 py-2 text-white rounded-lg transition-all duration-200 hover:opacity-80"
+                      style={{ backgroundColor: 'var(--color-primary)' }}>
+                      Shop
+                    </Link>
                   </div>
                 </div>
               </div>
-              {/* Visual side */}
-              <div className="hidden md:flex flex-col items-center justify-center p-12 bg-gradient-to-br from-emerald-50 to-emerald-100">
-                <div className="w-24 h-24 bg-[#25D366] rounded-3xl flex items-center justify-center shadow-xl mb-5">
-                  <svg className="w-14 h-14" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 2C10.059 2 2 10.059 2 20c0 3.294.904 6.384 2.479 9.027L2 38l9.139-2.395A17.93 17.93 0 0020 38c9.941 0 18-8.059 18-18S29.941 2 20 2z" fill="white" fillOpacity=".2"/>
-                    <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" fill="white"/>
-                  </svg>
+            ))}
+          </div>
+
+          <div className="mt-8 text-center sm:hidden">
+            <Link href="/shop" className="btn-secondary inline-flex">View All Products</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ── */}
+      {showTestimonials && (
+        <section className="section" style={{ backgroundColor: 'var(--color-hero-bg)' }}>
+          <div className="container">
+            <div className="mb-16">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-500">Customer Stories</span>
+              </div>
+              <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none">
+                What People<br />Are Saying.
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-800">
+              {testimonials.map((t) => (
+                <div key={t.name} className="p-10 group hover:bg-white/5 transition-colors duration-300"
+                  style={{ backgroundColor: 'var(--color-hero-bg)' }}>
+                  <StarRating count={t.rating} />
+                  <blockquote className="text-gray-300 text-base leading-relaxed mt-6 mb-8 font-light">
+                    &ldquo;{t.text}&rdquo;
+                  </blockquote>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 flex items-center justify-center shrink-0 rounded-lg"
+                      style={{ backgroundColor: t.accentColor || 'var(--color-primary)' }}>
+                      <span className="text-white font-black text-sm tracking-wider">{t.initials}</span>
+                    </div>
+                    <div>
+                      <p className="text-white font-bold text-sm tracking-wide">{t.name}</p>
+                      <p className="text-gray-500 text-xs tracking-widest uppercase mt-0.5">{t.role} · {t.location}</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-emerald-800 font-semibold text-center">We respond within minutes</p>
-                <p className="text-emerald-600 text-sm text-center mt-1">Available around the clock</p>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── TRUSTED PARTNERS ── */}
+      {showPartners && (
+        <section className="section-sm bg-white border-t border-b border-gray-100">
+          <div className="container">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 justify-center mb-3">
+                <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-400">Trusted Partners</span>
+                <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter uppercase">
+                Brands We Work With.
+              </h2>
+            </div>
+
+            <div className={`grid grid-cols-3 md:grid-cols-${Math.min(partners.length, 6)} gap-px bg-gray-100`}>
+              {partners.map((p) => (
+                <div key={p.name}
+                  className="bg-white py-10 flex flex-col items-center justify-center gap-3 group hover:bg-gray-50 transition-colors duration-200">
+                  <div className="w-14 h-14 bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center rounded-lg transition-colors duration-200">
+                    <span className="text-xs font-black tracking-widest text-gray-500">{p.abbr}</span>
+                  </div>
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-gray-400">{p.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── SUPPORT / WHATSAPP ── */}
+      <section className="section bg-[#f5f5f5]">
+        <div className="container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-200">
+            {/* Info side */}
+            <div className="bg-white p-12 md:p-16">
+              <div className="flex items-center gap-2 mb-6">
+                <span className="w-6 h-[2px] bg-emerald-500" />
+                <span className="text-xs font-bold tracking-[0.3em] uppercase text-emerald-500">24/7 Support</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase leading-none mb-6">
+                We&apos;re Here<br />For You.
+              </h2>
+              <p className="text-gray-500 mb-10 leading-relaxed">
+                Our team is always on standby. Reach us on WhatsApp and get a response within minutes — any time, any day.
+              </p>
+              <a href={`https://wa.me/${settings.store_phone?.replace(/\D/g, '') || '923001234567'}?text=Hello%20Support`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-[#25D366] hover:bg-[#20b857] text-white text-sm font-black tracking-widest uppercase rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg mb-8">
+                <svg className="w-5 h-5" viewBox="0 0 40 40" fill="currentColor">
+                  <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" />
+                </svg>
+                Chat on WhatsApp
+              </a>
+              <div className="flex flex-col gap-3 text-sm text-gray-400">
+                {settings.store_phone && (
+                  <span className="flex items-center gap-3">
+                    <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    {settings.store_phone}
+                  </span>
+                )}
+                {settings.store_email && (
+                  <span className="flex items-center gap-3">
+                    <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    {settings.store_email}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Visual side */}
+            <div className="p-12 md:p-16 flex flex-col justify-between"
+              style={{ backgroundColor: 'var(--color-hero-bg)' }}>
+              <div>
+                <div className="text-7xl font-black text-gray-800 uppercase tracking-tighter leading-none mb-8">
+                  Always<br />Online.
+                </div>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  No bots. No wait times. Real people, real solutions — because your experience matters.
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-4 mt-12">
+                {['Instant Reply', 'Friendly Team', '24/7 Active'].map((item) => (
+                  <div key={item} className="border border-gray-800 p-4 text-center rounded-lg">
+                    <p className="text-[10px] font-bold tracking-widest uppercase text-gray-600 leading-snug">{item}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Final CTA ── */}
-      <section className="section text-white relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)' }}>
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-1/2 -right-1/4 w-[600px] h-[600px] rounded-full bg-white/5" />
-          <div className="absolute -bottom-1/2 -left-1/4 w-[500px] h-[500px] rounded-full bg-white/5" />
-        </div>
-        <div className="container text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-extrabold mb-4">Ready to shop?</h2>
-          <p className="text-white/75 text-lg mb-8 max-w-md mx-auto">
-            Join thousands of happy customers. Sign up in seconds.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/shop"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white font-semibold rounded-xl text-base shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
-              style={{ color: 'var(--color-primary)' }}
-            >
-              Browse products
-            </Link>
-            <Link
-              href="/register"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white/10 text-white font-semibold rounded-xl text-base border border-white/25 hover:bg-white/20 transition-all duration-200 hover:-translate-y-0.5"
-            >
-              Create account
-            </Link>
+      {/* ── FINAL CTA ── */}
+      {settings.cta_enabled === 'true' && (
+        <section className="relative py-32 md:py-40 overflow-hidden"
+          style={{ backgroundColor: 'var(--color-hero-bg)' }}>
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-5 rounded-full"
+              style={{ background: 'radial-gradient(circle, var(--color-primary) 0%, transparent 60%)' }} />
           </div>
-        </div>
-      </section>
+          <div className="container relative z-10 text-center">
+            <div className="inline-flex items-center gap-2 justify-center mb-8">
+              <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+              <span className="text-xs font-bold tracking-[0.3em] uppercase text-gray-500">Join Thousands of Shoppers</span>
+              <span className="w-6 h-[2px]" style={{ backgroundColor: 'var(--color-primary)' }} />
+            </div>
+            <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase leading-none mb-6">
+              {settings.cta_title || 'Ready\nTo Shop?'}
+            </h2>
+            <p className="text-gray-400 text-lg mb-12 max-w-md mx-auto font-light">
+              {settings.cta_subtitle}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/shop"
+                className="inline-flex items-center justify-center gap-3 px-10 py-4 text-sm font-black tracking-widest uppercase text-black bg-white rounded-lg hover:bg-gray-100 transition-all duration-200">
+                {settings.cta_button_text || 'Browse Products'}
+              </Link>
+              <Link href="/register"
+                className="inline-flex items-center justify-center gap-3 px-10 py-4 text-sm font-black tracking-widest uppercase text-white rounded-lg border-2 border-white/20 hover:border-white/60 transition-all duration-200">
+                Create Account
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
     </div>
   );
 }

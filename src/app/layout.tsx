@@ -4,6 +4,7 @@ import WhatsAppWidget from '@/components/WhatsAppWidget';
 import '@/styles/globals.css';
 import { getSiteSettings, darkenHex } from '@/lib/settings';
 import { SettingsProvider } from '@/lib/settings-context';
+import { ThemeProvider } from '@/lib/theme-context';
 
 export async function generateMetadata() {
   const settings = await getSiteSettings();
@@ -23,6 +24,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       --color-secondary: ${settings.secondary_color};
       --color-secondary-dark: ${darkenHex(settings.secondary_color)};
       --color-accent: ${settings.accent_color};
+      --color-hero-bg: ${settings.hero_bg_color || '#0a0a0a'};
+      --color-header-bg: ${settings.header_bg_color || '#ffffff'};
+      --color-header-text: ${settings.header_text_color || '#111111'};
     }
   `;
 
@@ -32,13 +36,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <style dangerouslySetInnerHTML={{ __html: cssVars }} />
         {settings.favicon_url && <link rel="icon" href={settings.favicon_url} />}
       </head>
-      <body className="flex flex-col min-h-screen bg-gray-50">
-        <SettingsProvider settings={settings}>
-          <Header settings={settings} />
-          <main className="flex-grow">{children}</main>
-          <Footer settings={settings} />
-          <WhatsAppWidget />
-        </SettingsProvider>
+      <body className="flex flex-col min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300">
+        <ThemeProvider>
+          <SettingsProvider settings={settings}>
+            <Header settings={settings} />
+            <main className="flex-grow">{children}</main>
+            <Footer settings={settings} />
+            <WhatsAppWidget />
+          </SettingsProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
