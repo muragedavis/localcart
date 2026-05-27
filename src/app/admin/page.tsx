@@ -11,6 +11,7 @@ interface DashboardData {
   sales: { total_orders: number; total_revenue: number | string; total_customers: number; orders_last_30_days: number; };
   topProducts: Array<{ id: number; name: string; total_sold: number; revenue: number | string; }>;
   lowStockProducts: Array<{ id: number; name: string; stock_quantity: number; }>;
+  expenses?: { total_expenses: number | string; expenses_this_month: number | string; net_profit: number | string; };
 }
 
 export default function AdminDashboard() {
@@ -48,7 +49,9 @@ export default function AdminDashboard() {
     );
   }
 
-  const { sales, topProducts, lowStockProducts } = dashboard;
+  const { sales, topProducts, lowStockProducts, expenses } = dashboard;
+  const netProfit = parseFloat(String(expenses?.net_profit ?? 0));
+  const profitPositive = netProfit >= 0;
 
   const statCards = [
     {
@@ -76,6 +79,7 @@ export default function AdminDashboard() {
   const quickLinks = [
     { href: '/admin/products', label: 'Manage Products', desc: 'Add, edit, or remove products', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4', gradient: 'from-blue-500 to-indigo-600' },
     { href: '/admin/orders',   label: 'View Orders',    desc: 'Track and manage all orders', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', gradient: 'from-violet-500 to-purple-600' },
+    { href: '/admin/expenses', label: 'Expenses',       desc: 'Track costs and net profit',  icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', gradient: 'from-red-500 to-rose-600' },
     { href: '/admin/settings', label: 'Site Settings',  desc: 'Customize branding and store', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z', gradient: 'from-orange-500 to-amber-600' },
   ];
 
@@ -125,6 +129,52 @@ export default function AdminDashboard() {
             </div>
           ))}
         </div>
+
+        {/* Profit Summary */}
+        {expenses && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {/* Total Expenses */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-sm shrink-0">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{formatPrice(expenses.total_expenses ?? 0)}</p>
+                <p className="text-xs text-gray-400 font-medium">Total Expenses</p>
+              </div>
+            </div>
+            {/* This month's expenses */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-sm shrink-0">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{formatPrice(expenses.expenses_this_month ?? 0)}</p>
+                <p className="text-xs text-gray-400 font-medium">Expenses This Month</p>
+              </div>
+            </div>
+            {/* Net Profit */}
+            <div className={`rounded-2xl border p-5 flex items-center gap-4 ${profitPositive ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800' : 'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800'}`}>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm shrink-0 ${profitPositive ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-rose-600'}`}>
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={profitPositive ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6'} />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className={`text-xl font-bold tracking-tight ${profitPositive ? 'text-emerald-700 dark:text-emerald-400' : 'text-red-700 dark:text-red-400'}`}>
+                  {formatPrice(Math.abs(netProfit))}
+                </p>
+                <p className={`text-xs font-medium ${profitPositive ? 'text-emerald-600 dark:text-emerald-500' : 'text-red-600 dark:text-red-500'}`}>
+                  {profitPositive ? 'Net Profit' : 'Net Loss'} · Revenue − Expenses
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Data Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">

@@ -3,7 +3,7 @@
 export default function WhatsAppWidget() {
   return (
     <a
-      href="https://wa.me/923001234567?text=Hello%20LocalCart%20Support%20Team"
+      href="https://wa.me/254798349644?text=Hello%20LocalCart%20Support%20Team"
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 z-40 hover:scale-110"

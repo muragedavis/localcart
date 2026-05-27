@@ -38,9 +38,25 @@ async function handleGET(req: NextRequest, user: any) {
       ORDER BY stock_quantity ASC
     `);
 
+    // Get expenses totals (table may not exist yet — handle gracefully)
+    let expensesData = { total_expenses: 0, expenses_this_month: 0 };
+    try {
+      const expResult = await pool.query(`
+        SELECT
+          COALESCE(SUM(amount), 0) AS total_expenses,
+          COALESCE(SUM(CASE WHEN to_char(expense_date,'YYYY-MM') = to_char(CURRENT_DATE,'YYYY-MM') THEN amount END), 0) AS expenses_this_month
+        FROM expenses
+      `);
+      expensesData = expResult.rows[0];
+    } catch {
+      // expenses table not yet created — use zeros
+    }
+
     const sales = salesResult.rows[0];
     const topProducts = topProductsResult.rows;
     const lowStockProducts = lowStockResult.rows;
+    const totalRevenue = parseFloat(String(sales.total_revenue ?? 0));
+    const totalExpenses = parseFloat(String(expensesData.total_expenses ?? 0));
 
     return NextResponse.json({
       success: true,
@@ -48,6 +64,11 @@ async function handleGET(req: NextRequest, user: any) {
         sales,
         topProducts,
         lowStockProducts,
+        expenses: {
+          total_expenses: expensesData.total_expenses,
+          expenses_this_month: expensesData.expenses_this_month,
+          net_profit: totalRevenue - totalExpenses,
+        },
         currency: {
           code: settings.currency_code,
           symbol: settings.currency_symbol,

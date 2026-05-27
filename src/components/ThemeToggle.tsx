@@ -17,7 +17,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       className="relative w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105"
       style={{
-        background: isDark ? 'rgba(99,102,241,0.15)' : '#f3f4f6',
+        background: isDark ? 'rgba(215, 215, 234, 0.15)' : '#f3f4f6',
         color: isDark ? '#a5b4fc' : '#6b7280',
         border: isDark ? '1px solid rgba(99,102,241,0.25)' : '1px solid transparent',
       }}

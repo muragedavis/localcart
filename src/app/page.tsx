@@ -2,6 +2,11 @@
 
 import Link from 'next/link';
 import { useSettings } from '@/lib/settings-context';
+import { useState, useEffect } from 'react';
+import { useCartStore, useAuthStore } from '@/lib/store';
+import { useToast, ToastContainer } from '@/components/Toast';
+import apiClient from '@/lib/api-client';
+import ProductCard from '@/components/ProductCard';
 
 interface StatItem { value: string; label: string; }
 interface FeatureItem { icon: string; title: string; desc: string; }
@@ -10,6 +15,10 @@ interface TestimonialItem {
   text: string; rating: number; initials: string; accentColor: string;
 }
 interface PartnerItem { name: string; abbr: string; }
+interface Product {
+  id: number; name: string; price: number; description: string;
+  image_url: string; category_name: string; stock_quantity?: number;
+}
 
 function parse<T>(raw: string, fallback: T[]): T[] {
   try { return JSON.parse(raw) as T[]; } catch { return fallback; }
@@ -29,6 +38,31 @@ function StarRating({ count }: { count: number }) {
 
 export default function Home() {
   const settings = useSettings();
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const addItem = useCartStore((state) => state.addItem);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const { toasts, addToast, removeToast } = useToast();
+
+  useEffect(() => {
+    apiClient.get('/products?limit=4')
+      .then((r) => setFeaturedProducts(r.data.data))
+      .catch(() => {})
+      .finally(() => setProductsLoading(false));
+  }, []);
+
+  const handleAddToCart = async (product: Product) => {
+    if (!isLoggedIn) { window.location.href = '/login'; return; }
+    try {
+      const response = await apiClient.post('/cart', { product_id: product.id, quantity: 1 });
+      if (response.data.success) {
+        addItem({ id: product.id, product_id: product.id, product_name: product.name, quantity: 1, price: product.price });
+        addToast(`${product.name} added to cart`, 'success');
+      }
+    } catch (error: any) {
+      addToast(error.response?.data?.error || 'Failed to add to cart');
+    }
+  };
 
   const stats      = parse<StatItem>(settings.stats_items, []);
   const testimonials = parse<TestimonialItem>(settings.testimonials_items, []);
@@ -42,6 +76,7 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden bg-white dark:bg-gray-900">
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
 
       {/* ── HERO ── */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden"
@@ -178,28 +213,35 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:-translate-y-1 hover:border-gray-200 dark:hover:border-gray-600 transition-all duration-300">
-                <div className="h-52 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center overflow-hidden relative">
-                  <svg className="w-14 h-14 text-gray-200 dark:text-gray-600 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <div className="p-5">
-                  <span className="badge badge-gray mb-2">Category</span>
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Product {i}</h3>
-                  <p className="text-gray-400 dark:text-gray-500 text-xs mb-4 leading-relaxed">Quality product for everyday use</p>
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-50 dark:border-gray-700">
-                    <span className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                      {settings.currency_position === 'after' ? `29.99${settings.currency_symbol}` : `${settings.currency_symbol}29.99`}
-                    </span>
-                    <Link href="/shop" className="btn-primary text-xs py-2 px-4">Shop</Link>
+          {productsLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                  <div className="skeleton h-56 w-full rounded-none" />
+                  <div className="p-5 space-y-3">
+                    <div className="skeleton h-3 w-1/3" />
+                    <div className="skeleton h-4 w-3/4" />
+                    <div className="skeleton h-3 w-full" />
+                    <div className="flex justify-between items-center pt-3 mt-2 border-t border-gray-50 dark:border-gray-700">
+                      <div className="skeleton h-6 w-20" />
+                      <div className="skeleton h-8 w-24 rounded-xl" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <p className="text-gray-400 dark:text-gray-500 text-sm mb-4">No products yet</p>
+              <Link href="/shop" className="btn-primary text-sm">Browse All Products</Link>
+            </div>
+          )}
 
           <div className="mt-8 text-center sm:hidden">
             <Link href="/shop" className="btn-secondary">View All Products</Link>
