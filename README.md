@@ -243,7 +243,7 @@ MIT License - see LICENSE file for details
 
 ## Support
 
-For issues and questions, please create an issue on GitHub or contact the development team.
+For issues and questions, please create an issue on GitHub or contact davismurage.dm9@gmail.com.
 
 ## Changelog
 
