@@ -320,68 +320,172 @@ export default function Home() {
       {/* ── SUPPORT ── */}
       <section className="section bg-white dark:bg-gray-900">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
-            {/* Info */}
-            <div className="p-10 md:p-12">
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                24/7 support
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight leading-snug mb-4">
-                We&apos;re always here<br />when you need us.
-              </h2>
-              <p className="text-gray-500 dark:text-gray-400 mb-8 leading-relaxed text-sm">
-                Our team responds in minutes via WhatsApp. No waiting, no bots — just real help, whenever you need it.
-              </p>
-              <a href={`https://wa.me/${settings.store_phone?.replace(/\D/g, '') || '923001234567'}?text=Hello`}
-                target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 mb-7 bg-[#25D366] hover:bg-[#1fb855]">
-                <svg className="w-4 h-4" viewBox="0 0 40 40" fill="currentColor">
-                  <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" />
-                </svg>
-                Chat on WhatsApp
-              </a>
-              <div className="flex flex-col gap-2.5 text-sm text-gray-400 dark:text-gray-500">
-                {settings.store_phone && (
-                  <span className="flex items-center gap-2">
-                    <svg className="w-4 h-4 shrink-0 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    {settings.store_phone}
-                  </span>
-                )}
-                {settings.store_email && (
-                  <span className="flex items-center gap-2">
-                    <svg className="w-4 h-4 shrink-0 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    {settings.store_email}
-                  </span>
-                )}
-              </div>
-            </div>
+          <div className="overflow-hidden rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              {/* Info */}
+              <div className="relative p-10 md:p-12 overflow-hidden bg-gray-950">
+                {/* Ambient glow */}
+                <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 right-0 w-48 h-48 rounded-full bg-emerald-500/5 blur-2xl pointer-events-none" />
 
-            {/* Visual */}
-            <div className="relative hidden md:flex flex-col items-center justify-center p-12 overflow-hidden"
-              style={{ background: 'var(--color-section-tint)' }}>
-              <div className="absolute inset-0 opacity-30"
-                style={{ backgroundImage: 'radial-gradient(circle, rgba(99,102,241,0.15) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-              <div className="relative">
-                <div className="w-20 h-20 rounded-2xl bg-[#25D366] flex items-center justify-center shadow-xl mb-6 mx-auto">
-                  <svg className="w-10 h-10 text-white" viewBox="0 0 40 40" fill="currentColor">
-                    <path d="M20 2C10.059 2 2 10.059 2 20c0 3.294.904 6.384 2.479 9.027L2 38l9.139-2.395A17.93 17.93 0 0020 38c9.941 0 18-8.059 18-18S29.941 2 20 2z" fillOpacity=".2"/>
-                    <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z"/>
-                  </svg>
-                </div>
-                <div className="space-y-2 text-center">
-                  {['Typically replies in 2 minutes', 'Available 24 hours a day', 'Real people, real help'].map((t) => (
-                    <div key={t} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 justify-center">
-                      <svg className="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <div className="relative z-10">
+                  {/* Badge */}
+                  <div className="inline-flex items-center gap-2 mb-7">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                    </span>
+                    <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">Live Support</span>
+                  </div>
+
+                  {/* Heading */}
+                  <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-[1.1] mb-5">
+                    <span className="text-white">We&apos;re always here</span><br />
+                    <span className="bg-gradient-to-r from-emerald-400 to-green-300 bg-clip-text text-transparent">when you need us.</span>
+                  </h2>
+
+                  <p className="text-gray-400 mb-8 leading-relaxed text-sm max-w-xs">
+                    Our team responds in minutes via WhatsApp. No waiting, no bots — just real help, whenever you need it.
+                  </p>
+
+                  {/* Stat pills */}
+                  <div className="grid grid-cols-3 gap-3 mb-8">
+                    {[
+                      { value: '2 min', label: 'Avg. reply' },
+                      { value: '24/7', label: 'Available' },
+                      { value: '100%', label: 'Human' },
+                    ].map(({ value, label }) => (
+                      <div key={label} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center backdrop-blur-sm">
+                        <p className="text-white font-bold text-lg leading-none mb-1">{value}</p>
+                        <p className="text-gray-500 text-xs">{label}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <a href={`https://wa.me/${settings.store_phone?.replace(/\D/g, '') || '923001234567'}?text=Hello`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-3 w-full px-5 py-4 rounded-2xl bg-[#25D366] hover:bg-[#1fb855] text-white transition-all duration-200 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 mb-5 group">
+                    <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-white" viewBox="0 0 40 40" fill="currentColor">
+                        <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" />
                       </svg>
-                      {t}
                     </div>
-                  ))}
+                    <div className="flex-1 text-left">
+                      <p className="text-sm font-semibold leading-none mb-0.5">Chat on WhatsApp</p>
+                      <p className="text-xs text-white/70">Typically replies in 2 minutes</p>
+                    </div>
+                    <svg className="w-4 h-4 text-white/60 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+
+                  {/* Contact chips */}
+                  <div className="flex flex-wrap gap-2">
+                    {settings.store_phone && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 text-xs">
+                        <svg className="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        {settings.store_phone}
+                      </span>
+                    )}
+                    {settings.store_email && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-400 text-xs">
+                        <svg className="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        {settings.store_email}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Visual — chat mockup */}
+              <div className="relative hidden md:flex flex-col justify-center p-10 overflow-hidden"
+                style={{ background: 'linear-gradient(145deg, #075E54 0%, #128C7E 50%, #25D366 100%)' }}>
+                {/* Decorative blobs */}
+                <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/5" />
+                <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-white/5" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-white/[0.03]" />
+
+                {/* Phone mockup */}
+                <div className="relative z-10 mx-auto w-full max-w-[260px]">
+                  {/* Chat header */}
+                  <div className="bg-[#075E54] rounded-t-2xl px-4 py-3 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-[#25D366] flex items-center justify-center shrink-0 shadow">
+                      <svg className="w-5 h-5 text-white" viewBox="0 0 40 40" fill="currentColor">
+                        <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-white text-xs font-semibold leading-none">Support Team</p>
+                      <p className="text-emerald-300 text-[10px] mt-0.5">Online now</p>
+                    </div>
+                    <div className="ml-auto w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  </div>
+
+                  {/* Chat body */}
+                  <div className="bg-[#ECE5DD] px-3 py-4 space-y-3 rounded-b-2xl shadow-2xl">
+                    {/* Incoming */}
+                    <div className="flex gap-2 items-end">
+                      <div className="w-6 h-6 rounded-full bg-[#25D366] flex items-center justify-center shrink-0 mb-0.5">
+                        <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 40 40" fill="currentColor">
+                          <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" />
+                        </svg>
+                      </div>
+                      <div className="bg-white rounded-2xl rounded-bl-sm px-3 py-2 shadow-sm max-w-[75%]">
+                        <p className="text-[11px] text-gray-800 leading-snug">Hi! How can we help you today? 👋</p>
+                        <p className="text-[9px] text-gray-400 text-right mt-1">9:41 AM</p>
+                      </div>
+                    </div>
+
+                    {/* Outgoing */}
+                    <div className="flex justify-end">
+                      <div className="bg-[#DCF8C6] rounded-2xl rounded-br-sm px-3 py-2 shadow-sm max-w-[75%]">
+                        <p className="text-[11px] text-gray-800 leading-snug">I have a question about my order</p>
+                        <p className="text-[9px] text-gray-400 text-right mt-1">9:42 AM ✓✓</p>
+                      </div>
+                    </div>
+
+                    {/* Incoming */}
+                    <div className="flex gap-2 items-end">
+                      <div className="w-6 h-6 rounded-full bg-[#25D366] flex items-center justify-center shrink-0 mb-0.5">
+                        <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 40 40" fill="currentColor">
+                          <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" />
+                        </svg>
+                      </div>
+                      <div className="bg-white rounded-2xl rounded-bl-sm px-3 py-2 shadow-sm max-w-[75%]">
+                        <p className="text-[11px] text-gray-800 leading-snug">Of course! I&apos;m looking into it right now 😊</p>
+                        <p className="text-[9px] text-gray-400 text-right mt-1">9:42 AM</p>
+                      </div>
+                    </div>
+
+                    {/* Typing indicator */}
+                    <div className="flex gap-2 items-end">
+                      <div className="w-6 h-6 rounded-full bg-[#25D366] flex items-center justify-center shrink-0">
+                        <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 40 40" fill="currentColor">
+                          <path d="M27.9 24.4c-.36-.18-2.12-1.05-2.45-1.17-.32-.12-.56-.18-.79.18-.24.36-.92 1.17-1.12 1.4-.2.24-.41.27-.77.09-.36-.18-1.53-.56-2.91-1.79-1.08-.96-1.8-2.14-2.01-2.5-.21-.36-.02-.56.16-.74.16-.16.36-.42.54-.63.18-.2.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.79-1.9-1.08-2.6-.28-.68-.57-.59-.79-.6-.2-.01-.45-.01-.69-.01-.24 0-.62.09-.95.45-.32.36-1.22 1.19-1.22 2.91s1.25 3.37 1.43 3.61c.18.24 2.46 3.76 5.96 5.27.83.36 1.48.57 1.99.73.84.26 1.6.22 2.2.13.67-.1 2.07-.85 2.36-1.66.29-.82.29-1.52.2-1.66-.09-.15-.32-.24-.68-.42z" />
+                        </svg>
+                      </div>
+                      <div className="bg-white rounded-2xl rounded-bl-sm px-3 py-2 shadow-sm">
+                        <div className="flex gap-1 items-center h-4">
+                          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Avg response badge */}
+                <div className="relative z-10 mt-5 mx-auto flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 w-fit">
+                  <svg className="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-white text-xs font-medium">Avg. reply in 2 min</span>
                 </div>
               </div>
             </div>
